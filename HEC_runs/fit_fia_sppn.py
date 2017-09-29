@@ -25,7 +25,8 @@ __email__ ="molgor@gmail.com"
 import geopandas as gpd
 from shapely.geometry import Point
 import pandas as pd
-import GPflow as gf
+#import GPflow as gf
+import gpflow as gf
 import numpy as np
 
 import logging
