@@ -115,14 +115,14 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     logger.info("Subselecting Region")
     section = subselectDataFrame(data, minx, maxx, miny, maxy)
     X = section[['lon','lat']]
-    Y = section['SppN']
+    Y = section['plotBiomass']
     logger.info("Fitting GaussianProcess Model")
     model = fitMatern12Model(X, Y, optimise=True)
     param_model = pd.DataFrame(model.get_parameter_dict())
-    param_model.to_csv('sppnmodel_parameters.csv')
+    param_model.to_csv('biomassmodel_parameters.csv')
     logger.info("Predicting Points")  
     space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=predicted_size)
-    space.to_csv('spppredicted_points.csv')
+    space.to_csv('biomasspredicted_points.csv')
     logger.info("Finished! Results in: tests1.csv")
     
     
