@@ -27,7 +27,7 @@ from shapely.geometry import Point
 import pandas as pd
 import GPflow as gf
 import numpy as np
-
+import sys
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -99,17 +99,18 @@ def buildPredictiveSpace(inputGeoDataFrame,GPFlowModel,num_of_predicted_coordina
 
 
 
-def main():
+def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     """
     The main batch processing
     """
     logger.info("Reading Data")
     #data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
-    data = pd.read_csv("/home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv")
-    minx = -90
-    maxx = -85 
-    miny = 30
-    maxy = 35
+    #data = pd.read_csv("/home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv")
+    data = pd.read_csv(csv_path)
+    minx = minx
+    maxx = maxx
+    miny = miny
+    maxy = maxy
     logger.info("Subselecting Region")
     section = subselectDataFrame(data, minx, maxx, miny, maxy)
     X = section[['lon','lat']]
@@ -117,31 +118,35 @@ def main():
     logger.info("Fitting GaussianProcess Model")
     model = fitMatern12Model(X, Y, optimise=True)
     logger.info("Predicting Points")  
-    space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=300 )
+    space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=predicted_size)
     space.to_csv('test1.csv')
     logger.info("Finished! Results in: tests1.csv")
     
     
     
 if __name__ == "__main__":
-    main()
+    csv_path = sys.argv[1]
+    minx = float(sys.argv[2])
+    maxx = float(sys.argv[3])
+    miny = float(sys.argv[4])
+    maxy = float(sys.argv[5])
+    predicted_size = float(sys.argv[6])
+    main(csv_path,minx,maxx,miny,maxy,predicted_size)
+
+
+
+## For running 
+## python fit_fia_sppn.py /path/to/csv -90 -80 30 40 300 
+#python fit_fia_sppn.py /RawDataCSV/idiv_share/plotsClimateData_11092017.csv -90 -80 30 40 300 
+## In hec
+#python fit_fia_sppn.py /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv -90 -80 30 40 300 
 
 
 ## Wishes
-#Arguments of geo extent to put during run time
+
 #Arguments for the DataSource
 #Arguments for the putput name.
 #Atguments maybe for the kernel model.
 #For now let's make the test in HEC
-
-
-## On HEC
-#data = pd.read_csv("/home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv")
-
-
-
-
-
-#results.to_csv('test1.csv')
 
 
