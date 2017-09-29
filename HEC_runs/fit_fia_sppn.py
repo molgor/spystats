@@ -104,7 +104,8 @@ def main():
     The main batch processing
     """
     logger.info("Reading Data")
-    data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
+    #data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
+    data = pd.read_csv("/home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv")
     minx = -90
     maxx = -85 
     miny = 30
