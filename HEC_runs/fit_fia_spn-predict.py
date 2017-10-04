@@ -122,7 +122,7 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     X = section[['lon','lat']]
     Y = section['SppN']
     logger.info("Fitting GaussianProcess Model")
-    model = fitMatern12Model(X, Y, optimise=True)
+    model = fitMatern12Model(X, Y, optimise=False)
     param_model = pd.DataFrame(model.get_parameter_dict())
     param_model.to_csv('sppnmodel_parameters.csv')
     logger.info("Predicting Points")  
