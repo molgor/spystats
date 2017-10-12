@@ -100,7 +100,7 @@ def buildPredictiveSpace(inputGeoDataFrame,GPFlowModel,num_of_predicted_coordina
     #predicted_coordinate
     means,variances = GPFlowModel.predict_y(predicted_coordinates)
 
-    results = pd.DataFrame([means,variances,longitudes,latitudes])
+    results = (pd.DataFrame([means,variances]),pd.DataFrame([longitudes,latitudes]))
     return results
 
 
@@ -126,8 +126,9 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     param_model = pd.DataFrame(model.get_parameter_dict())
     param_model.to_csv('sppnmodel_parameters.csv')
     logger.info("Predicting Points")  
-    space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=predicted_size)
-    space.to_csv('spppredicted_points.csv')
+    stats, space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=predicted_size)
+    stats.to_csv('spppredicted_points.csv')
+    space.to_csv('spppredicted_space.csv')
     logger.info("Finished! Results in: tests1.csv")
     
     
