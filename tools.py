@@ -26,6 +26,8 @@ import pandas as pd
 from shapely.geometry import Point
 import scipy.spatial as sp
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 
 def toGeoDataFrame(pandas_dataframe,xcoord_name,ycoord_name,srs = 'epsg:4326'):
@@ -180,3 +182,30 @@ class Variogram(object):
         envelopedf = pd.concat([envelopedf,self.empirical],axis=1)
         self.envelope = envelopedf
         return envelopedf
+    
+    
+    def plot(self,with_envelope=True,capendpoints=0.1):
+        """
+        Plot the empirical semivariogram with optional confidence interval using MonteCarlo permutations at 0.025 and 0.975 quantiles.
+        Returns a matplotlib object.
+        Parameters : 
+            with_envelope : (Boolean) if true it will calculate and plot the 0.025 and 0.975 quantiles of a montecarlo permutations of $Y$ using fixed locations.
+            capendpoints : (float) cut the data bigger than the selected quantile. By default 0.01
+        """
+        v = env.iloc[1:30,:]
+        #points = plt.scatter(vg.lags,vg.empirical)
+ 
+        plt.plot(v.lags,v.envhigh,'k--')
+        plt.plot(v.lags,v.variogram,'o--',lw=2.0)
+        plt.plot(v.lags,v.envlow,'k--')
+
+        plt.fill_between(v.lags,v.envlow,v.envhigh,alpha=0.5)
+        plt.legend(loc='best')
+        plt.xlabel("Distance in meters")
+        plt.ylabel("Semivariance")
+        plt.legend(labels=['97.5%','emp. varig','2.5%'])
+        #ax = 
+        #points2 = plt.lines(vg.lags,vg.empirical,c='red')
+        #plt.show()
+        
+        
