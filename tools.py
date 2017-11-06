@@ -27,6 +27,10 @@ from shapely.geometry import Point
 import scipy.spatial as sp
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
+#from external_plugins.spystats import tools as tl
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 
@@ -104,7 +108,7 @@ def calculateEmpiricalVariogram(distances,response_variable,n_bins=50):
     return results  
  
 
-def montecarloEnvelope(distances,response_variable,num_iterations=99):
+def montecarloEnvelope(distances,response_variable,num_iterations=99,n_bins=50):
     """
     Generate Monte Carlo envelope by shuffling the response variable and keeping the distances the same.
     After GeoR. ("Model-Based Geostatistics; Diggle and Ribeiro, 2007")
@@ -113,14 +117,14 @@ def montecarloEnvelope(distances,response_variable,num_iterations=99):
         response_variable (list) linearised format of a response distance matrix.
     """
     simulation_variograms = []
-    d = calculateEmpiricalVariogram(distances,response_variable)
+    d = calculateEmpiricalVariogram(distances,response_variable,n_bins=n_bins)
     for i in range(num_iterations):
         #np.random.shuffle(response_variable)
-        d = calculateEmpiricalVariogram(distances,response_variable)
+        d = calculateEmpiricalVariogram(distances,response_variable,n_bins=n_bins)
         simulation_variograms.append(d.variogram)
         np.random.shuffle(response_variable)
 
-    simulation_variograms.append(d.lags)
+    #simulation_variograms.append(d.lags)
     #sims = pd.DataFrame(simulation_variograms).transpose()
     sims = pd.DataFrame(simulation_variograms)
 
@@ -129,7 +133,8 @@ def montecarloEnvelope(distances,response_variable,num_iterations=99):
     low_q = sims.quantile(0.025)
     high_q = sims.quantile(0.975)
     envelope = pd.DataFrame({'envlow':low_q,'envhigh':high_q,'lags':d.lags})
-    return envelope    
+    return (envelope,sims)
+    #return envelope    
 
 class Variogram(object):
     """
@@ -145,14 +150,14 @@ class Variogram(object):
         """
         self.distance_coordinates = _getDistanceMatrix(geopandas_dataset)
         self.distance_responses = _getDistResponseVariable(geopandas_dataset,response_variable_name)
-        self.empirical = []
+        self.empirical = pd.Series()
         self.lags = []
-        self.envelope = []
+        self.envelope = pd.DataFrame()
   
     
     
         
-    def calculate_empirical(self,n_bins=50):
+    def calculateEmpirical(self,n_bins=50):
         """
         Returns the empirical variogram given by the formula:
         $$ v_{lag_i} = \frac{\sum_{i=1}^{N(lag_i)} (y_i - y_j)^2}{2} $$
@@ -172,40 +177,81 @@ class Variogram(object):
         self.empirical = results.variogram
         return self.empirical
         
-    def calculateEnvelope(self,num_iterations=99):
+    def calculateEnvelope(self,num_iterations=99,n_bins=50):
         """
         Calculates the Montecarlo variogram envelope.
         """
+        logger.info("Calculating envelope via MonteCarlo Simulations. \n Using %s iterations"%num_iterations)
         distances = self.distance_coordinates.flatten()
         responses = self.distance_responses.flatten()
-        envelopedf = montecarloEnvelope(distances,responses,num_iterations=num_iterations)
+        envelopedf,sims = montecarloEnvelope(distances,responses,num_iterations=num_iterations,n_bins=n_bins)
         envelopedf = pd.concat([envelopedf,self.empirical],axis=1)
         self.envelope = envelopedf
         return envelopedf
     
     
-    def plot(self,with_envelope=True,capendpoints=0.1):
+    def plot(self,with_envelope=True,percentage_trunked=10,refresh=True,n_bins=50,**kwargs):
         """
         Plot the empirical semivariogram with optional confidence interval using MonteCarlo permutations at 0.025 and 0.975 quantiles.
         Returns a matplotlib object.
         Parameters : 
             with_envelope : (Boolean) if true it will calculate and plot the 0.025 and 0.975 quantiles of a montecarlo permutations of $Y$ using fixed locations.
-            capendpoints : (float) cut the data bigger than the selected quantile. By default 0.01
+            percentage_trunked = (float) Percentage of data removed in the plot. This is to ease the visualisation by cutting the last values
+                    
+        Extra parameters in the kwargs
+            * num_iterations : (Integer) see CalculateEnvelope
+            * n_bins : (Integer) see calculate_variogram 
+        
         """
-        v = env.iloc[1:30,:]
+        
+        
+        #v = env.iloc[1:30,:]
         #points = plt.scatter(vg.lags,vg.empirical)
- 
-        plt.plot(v.lags,v.envhigh,'k--')
-        plt.plot(v.lags,v.variogram,'o--',lw=2.0)
-        plt.plot(v.lags,v.envlow,'k--')
-
-        plt.fill_between(v.lags,v.envlow,v.envhigh,alpha=0.5)
+        if (self.empirical.empty or refresh == True):
+            logger.info("Calculating empirical variogram")
+            self.calculateEmpirical(n_bins=n_bins)
+        
+        nrows = self.empirical.shape[0]
+        indx = int(np.ceil(float(percentage_trunked)/100 * nrows))
+        
+        lags = self.lags.iloc[: (nrows - indx)]
+        empirical = self.empirical.iloc[:(nrows - indx)]
+        
+                           
+        if with_envelope:
+            if ( self.envelope.empty or refresh == True) :
+                logger.info("No envelope object found. Calculating...")
+                num_iter = kwargs.get('num_iterations')
+                if isinstance(num_iter, int):
+                    self.calculateEnvelope(num_iterations=num_iter,n_bins=n_bins)
+                else:
+                    self.calculateEnvelope()
+                #except:
+                #    self.calculateEnvelope()
+            else:
+                logger.info("Using previously stored envelope. Use refresh option to recalculate.")   
+            
+            envelope = self.envelope.iloc[:(nrows - indx)]
+            
+            ## ********* PLOT    
+            #plt.plot(lags,empirical,'o--',lw=2.0)
+            ### ***** PLOT
+            plt.plot(lags,envelope.envhigh,'k--')
+            plt.plot(lags,envelope.envlow,'k--')
+            plt.fill_between(lags,envelope.envlow,envelope.envhigh,alpha=0.5)
+            plt.legend(labels=['97.5%','emp. varig','2.5%'])
+        
+        
+        ## ********* PLOT    
+        plt.plot(lags,empirical,'o--',lw=2.0)         
+        ## ****** PLOT
         plt.legend(loc='best')
         plt.xlabel("Distance in meters")
         plt.ylabel("Semivariance")
-        plt.legend(labels=['97.5%','emp. varig','2.5%'])
+        #plt.legend(labels=['97.5%','emp. varig','2.5%'])
         #ax = 
         #points2 = plt.lines(vg.lags,vg.empirical,c='red')
         #plt.show()
-        
+        logger.debug("Check which object to return. maybe a figure")
+        return None 
         

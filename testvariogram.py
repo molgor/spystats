@@ -26,12 +26,11 @@ plt.style.use('ggplot')
 from external_plugins.spystats import tools
 # My mac
 logging.info("Reading data")
-data = pd.read_csv("/RawDataCSV/plotsClimateData_11092017.csv")
+#data = pd.read_csv("/RawDataCSV/plotsClimateData_11092017.csv")
 # My Linux desktop
-#data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
+data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
 new_data = tools.toGeoDataFrame(pandas_dataframe=data,xcoord_name='LON',ycoord_name='LAT')
 ## Reproject to alberts
-
 new_data =  new_data.to_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs ")
 new_data['logBiomass'] = new_data.apply(lambda x : np.log(x.plotBiomass),axis=1)
 new_data['newLon'] = new_data.apply(lambda c : c.geometry.x, axis=1)
@@ -47,8 +46,11 @@ param_model = results.params
 results.summary()
 
 new_data['residuals1'] = results.resid
-vg = tools.Variogram(new_data,'logBiomass')
-vg.calculate_empirical(n_bins=10)
+
+## Select a section
+section = new_data[lambda x:  (x.LON > -90) & (x.LON < -85) & (x.LAT > 30) & (x.LAT < 35) ]
+#vg = tools.Variogram(new_data,'logBiomass')
+#vg.calculate_empirical(n_bins=10)
 
 
 
