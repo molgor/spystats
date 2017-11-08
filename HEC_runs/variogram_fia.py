@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 from tools import toGeoDataFrame, Variogram
 
 
-def main(minx,maxx,miny,maxy,predicted_size=300):
+def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     """
     The main batch processing
     """
@@ -50,7 +50,9 @@ def main(minx,maxx,miny,maxy,predicted_size=300):
     # My mac
     #data = pd.read_csv("/RawDataCSV/plotsClimateData_11092017.csv")
     # My Linux desktop
-    data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
+    
+    data = pd.read_csv(csv_path)
+    #data = pd.read_csv("/RawDataCSV/idiv_share/plotsClimateData_11092017.csv")
     #new_data = tools.toGeoDataFrame(pandas_dataframe=data,xcoord_name='LON',ycoord_name='LAT')
 
     new_data = toGeoDataFrame(pandas_dataframe=data,xcoord_name='LON',ycoord_name='LAT')
@@ -99,10 +101,12 @@ def main(minx,maxx,miny,maxy,predicted_size=300):
     
 if __name__ == "__main__":
     __package__ = "spystats"
-    minx = float(sys.argv[1])
-    maxx = float(sys.argv[2])
-    miny = float(sys.argv[3])
-    maxy = float(sys.argv[4])
-    main(minx,maxx,miny,maxy)
+    csv_path = sys.argv[1]
+    minx = float(sys.argv[2])
+    maxx = float(sys.argv[3])
+    miny = float(sys.argv[4])
+    maxy = float(sys.argv[5])    
+    
+    main(csv_path,minx,maxx,miny,maxy)
 
 
