@@ -32,14 +32,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import logging
 #from external_plugins.spystats import tools as tl
+
+
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-
-
-
-
 
 
 
@@ -203,7 +200,7 @@ class Variogram(object):
         return envelopedf
     
     
-    def plot(self,with_envelope=True,percentage_trunked=10,refresh=True,n_bins=50,**kwargs):
+    def plot(self,with_envelope=True,percentage_trunked=10,refresh=True,n_bins=50,plot_filename=False,**kwargs):
         """
         Plot the empirical semivariogram with optional confidence interval using MonteCarlo permutations at 0.025 and 0.975 quantiles.
         Returns a matplotlib object.
@@ -266,5 +263,18 @@ class Variogram(object):
         #points2 = plt.lines(vg.lags,vg.empirical,c='red')
         #plt.show()
         logger.debug("Check which object to return. maybe a figure")
+        if plot_filename :
+            plt.savefig(plot_filename)
+        
         return None 
+        
+        
+        
+if __name__ == "__main__":
+    __package__ = "spystats"
+    
+
+
+
+
         
