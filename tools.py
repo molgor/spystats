@@ -153,7 +153,7 @@ class Variogram(object):
     """
     A class that defines Empirical Variogram objects.
     """
-    def __init__(self,geopandas_dataset,response_variable_name):
+    def __init__(self,geopandas_dataset,response_variable_name,using_distance_threshold=False):
         """
         Constructor
             Parameters :
