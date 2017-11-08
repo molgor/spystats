@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  default:
+   external:
+    name: 'biospytial_default'
+
+services:
+
+ ## Biospytial3 client
+ client:
+  ports:
+   - '8889:8888'
+  volumes:
+   - '/mnt/data1/RawDataCSV:/RawDataCSV'
+   - '/mnt/data1/git-projects/biospytial:/apps'
+   - '/mnt/data1:/mnt/data1'
+   - '/tmp/.X11-unix:/tmp/.X11-unix'
+  
+  #links:
+  # - postgis
+  # - neo4j
+  #depends_on:
+  # - postgis
+  # - neo4j
+  environment:
+    DISPLAY: unix$DISPLAY
+  image: molgor/biospytial3
+  # For interactive mode
+  stdin_open: true
+  tty: true
+  entrypoint: /bin/bash
