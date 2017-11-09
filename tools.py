@@ -96,7 +96,7 @@ def _getDistResponseVariable(geopandas_dataset,response_variable_name):
     dY = sp.distance_matrix(yy,yy,p=2.0)
     return dY
  
-def calculateEmpiricalVariogram(distances,response_variable,n_bins=50):
+def calculateEmpiricalVariogram(distances,response_variable,n_bins=50,distance_threshold=False):
     """
     Returns the empirical variogram given by the formula
     $$ v_{lag_i} = \frac{\sum_{i=1}^{N(lag_i)} (y_i - y_j)^2}{2} $$    
@@ -104,12 +104,18 @@ def calculateEmpiricalVariogram(distances,response_variable,n_bins=50):
     n_bins : (Integer) number of bins (lag distances)  
     """
     mdist = min(distances)
-    Mdist = max(distances)
+    if distance_threshold :
+        Mdist = distance_threshold * (1.0/10.0 + 1)
+    else:
+        Mdist = max(distances)
+        
     partitions = np.linspace(mdist,Mdist,n_bins)
     lags = partitions[:n_bins - 1]
     y = response_variable
     d = pd.DataFrame({'dist': distances,'y':y})
-      
+    
+    if distance_threshold:
+        d = d[ d['dist'] < distance_threshold ]
     # The actual emp. var function     
     empvar =  map(lambda (i,x) : 0.5 * (d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].y.mean()),enumerate(lags))
     #self.empirical = empvar
@@ -118,7 +124,7 @@ def calculateEmpiricalVariogram(distances,response_variable,n_bins=50):
     return results  
  
 
-def montecarloEnvelope(distances,response_variable,num_iterations=99,n_bins=50):
+def montecarloEnvelope(distances,response_variable,num_iterations=99,n_bins=50,distance_threshold=False):
     """
     Generate Monte Carlo envelope by shuffling the response variable and keeping the distances the same.
     After GeoR. ("Model-Based Geostatistics; Diggle and Ribeiro, 2007")
@@ -127,17 +133,18 @@ def montecarloEnvelope(distances,response_variable,num_iterations=99,n_bins=50):
         response_variable (list) linearised format of a response distance matrix.
     """
     simulation_variograms = []
-    d = calculateEmpiricalVariogram(distances,response_variable,n_bins=n_bins)
+    d = calculateEmpiricalVariogram(distances,response_variable,n_bins=n_bins,distance_threshold=distance_threshold)
     for i in range(num_iterations):
         #np.random.shuffle(response_variable)
-        d = calculateEmpiricalVariogram(distances,response_variable,n_bins=n_bins)
+        d = calculateEmpiricalVariogram(distances,response_variable,n_bins=n_bins,distance_threshold=distance_threshold)
         simulation_variograms.append(d.variogram)
         np.random.shuffle(response_variable)
 
     #simulation_variograms.append(d.lags)
     #sims = pd.DataFrame(simulation_variograms).transpose()
     sims = pd.DataFrame(simulation_variograms)
-
+    ## Drop any possible Nan, incompatible with quantile
+    sims = sims.dropna(axis=1)
     #sims.set_index('lags')
     
     low_q = sims.quantile(0.025)
@@ -157,12 +164,14 @@ class Variogram(object):
                 geopandas_dataset : (geopandas) the geopandas dataframe.
                 response_variable_name : (string) name of the variable for calculating the distance.
                 p : the Minkowski distance exponent (order)
+                distance_threshold : same units as coordinates
         """
         self.distance_coordinates = _getDistanceMatrix(geopandas_dataset)
         self.distance_responses = _getDistResponseVariable(geopandas_dataset,response_variable_name)
         self.empirical = pd.Series()
         self.lags = []
         self.envelope = pd.DataFrame()
+        self.distance_threshold = using_distance_threshold
   
     
     
@@ -181,7 +190,7 @@ class Variogram(object):
         
         distances = self.distance_coordinates.flatten()
         y = self.distance_responses.flatten()
-        results = calculateEmpiricalVariogram(distances,y,n_bins=n_bins)
+        results = calculateEmpiricalVariogram(distances,y,n_bins=n_bins,distance_threshold=self.distance_threshold)
         
         self.lags = results.lags
         self.empirical = results.variogram
@@ -194,7 +203,7 @@ class Variogram(object):
         logger.info("Calculating envelope via MonteCarlo Simulations. \n Using %s iterations"%num_iterations)
         distances = self.distance_coordinates.flatten()
         responses = self.distance_responses.flatten()
-        envelopedf,sims = montecarloEnvelope(distances,responses,num_iterations=num_iterations,n_bins=n_bins)
+        envelopedf,sims = montecarloEnvelope(distances,responses,num_iterations=num_iterations,n_bins=n_bins,distance_threshold=self.distance_threshold)
         envelopedf = pd.concat([envelopedf,self.empirical],axis=1)
         self.envelope = envelopedf
         return envelopedf
