@@ -24,6 +24,7 @@ import statsmodels.formula.api as smf
 import logging
 import sys
 sys.path.append('..')
+sys.path.append('/home/hpc/28/escamill/spystats')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
