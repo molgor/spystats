@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 from tools import toGeoDataFrame, Variogram
 
 
-def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
+def main(csv_path,minx,maxx,miny,maxy,predicted_size=300,distance_threshold=500000):
     """
     The main batch processing
     """
@@ -88,7 +88,7 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     
     logger.info("Calculating Empirical Variogram")
     #vg = tools.Variogram(section,'residuals1')
-    vg = Variogram(section,'residuals1')
+    vg = Variogram(section,'residuals1',using_distance_threshold=distance_threshold)
     
     #vg.calculate_empirical(n_bins=50)
     vgplot = vg.plot(num_iterations=40,n_bins=40,plot_filename='test1.png')
@@ -106,8 +106,9 @@ if __name__ == "__main__":
     minx = float(sys.argv[2])
     maxx = float(sys.argv[3])
     miny = float(sys.argv[4])
-    maxy = float(sys.argv[5])    
+    maxy = float(sys.argv[5])
+    dist_thres = float(sys.argv[6])
     
-    main(csv_path,minx,maxx,miny,maxy)
+    main(csv_path,minx,maxx,miny,maxy,distance_threshold=dist_thres)
 
 
