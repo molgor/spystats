@@ -50,9 +50,58 @@ results.summary()
 new_data['residuals1'] = results.resid
 
 ## Select a section
-section = new_data[lambda x:  (x.LON > -90) & (x.LON < -85) & (x.LAT > 30) & (x.LAT < 35) ]
+#section = new_data[lambda x:  (x.LON > -90) & (x.LON < -85) & (x.LAT > 30) & (x.LAT < 35) ]
 #vg = tools.Variogram(new_data,'logBiomass')
 #vg.calculate_empirical(n_bins=10)
+
+
+
+def subselectDataFrameByCoordinates(dataframe,namecolumnx,namecolumny,minx,maxx,miny,maxy):
+    """
+    Returns a subselection by coordinates using the dataframe/
+    """
+    minx = float(minx)
+    maxx = float(maxx)
+    miny = float(miny)
+    maxy = float(maxy)
+    section = dataframe[lambda x:  (x[namecolumnx] > minx) & (x[namecolumnx] < maxx) & (x[namecolumny] > miny) & (x[namecolumny] < maxy) ]
+    return section
+
+
+
+
+def getExtent(geodataframe):
+    """
+    REturn the tuple of the spatial extent. Based on geopandas geometry attribute.
+    """
+    minx = min(geodataframe.geometry.x)
+    maxx = max(geodataframe.geometry.x)
+
+    miny = min(geodataframe.geometry.y)
+    maxy = max(geodataframe.geometry.y)
+    
+
+    return (minx,maxx,miny,maxy)
+  
+
+def getExtentFromPoint(x,y,step_sizex,step_sizey):
+    """
+    Returns a tuple (4) specifying the minx,maxx miny, maxy based on a given point and a step size.
+    The x,y point is located in the bottom left corner.
+    """  
+    minx = x
+    miny = y
+    maxx = x + step_sizex
+    maxy = y + step_sizey
+    return (minx,maxx,miny,maxy)
+    
+    
+  
+    
+section = subselectDataFrameByCoordinates(new_data, 'lon', 'lat', -90 , -85,30, 35)
+
+
+
 
 
 

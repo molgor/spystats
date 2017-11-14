@@ -65,6 +65,66 @@ def toGeoDataFrame(pandas_dataframe,xcoord_name,ycoord_name,srs = 'epsg:4326'):
 
 
 
+
+
+
+
+def _subselectDataFrameByCoordinates(dataframe,namecolumnx,namecolumny,minx,maxx,miny,maxy):
+    """
+    Returns a subselection by coordinates using the dataframe/
+    """
+    minx = float(minx)
+    maxx = float(maxx)
+    miny = float(miny)
+    maxy = float(maxy)
+    section = dataframe[lambda x:  (x[namecolumnx] > minx) & (x[namecolumnx] < maxx) & (x[namecolumny] > miny) & (x[namecolumny] < maxy) ]
+    return section
+
+
+
+
+def _getExtent(geodataframe):
+    """
+    REturn the tuple of the spatial extent. Based on geopandas geometry attribute.
+    """
+    minx = min(geodataframe.geometry.x)
+    maxx = max(geodataframe.geometry.x)
+
+    miny = min(geodataframe.geometry.y)
+    maxy = max(geodataframe.geometry.y)
+    
+
+    return (minx,maxx,miny,maxy)
+  
+
+def _getExtentFromPoint(x,y,step_sizex,step_sizey):
+    """
+    Returns a tuple (4) specifying the minx,maxx miny, maxy based on a given point and a step size.
+    The x,y point is located in the bottom left corner.
+    """  
+    minx = x
+    miny = y
+    maxx = x + step_sizex
+    maxy = y + step_sizey
+    return (minx,maxx,miny,maxy)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def _getDistanceMatrix(geopandas_dataset):
     """
     Returns the "self/auto" distance matrix of a given list of vector data. 
@@ -96,6 +156,17 @@ def _getDistResponseVariable(geopandas_dataset,response_variable_name):
     dY = sp.distance_matrix(yy,yy,p=2.0)
     return dY
  
+
+
+
+
+
+
+
+
+
+
+
 def calculateEmpiricalVariogram(distances,response_variable,n_bins=50,distance_threshold=False):
     """
     Returns the empirical variogram given by the formula
@@ -166,14 +237,20 @@ class Variogram(object):
                 p : the Minkowski distance exponent (order)
                 distance_threshold : same units as coordinates
         """
-        self.distance_coordinates = _getDistanceMatrix(geopandas_dataset)
-        self.distance_responses = _getDistResponseVariable(geopandas_dataset,response_variable_name)
+        self.data = geopandas_dataset
+        self.selected_response_variable = response_variable_name
         self.empirical = pd.Series()
         self.lags = []
         self.envelope = pd.DataFrame()
         self.distance_threshold = using_distance_threshold
   
-    
+    @property
+    def distance_coordinates(self): 
+        return _getDistanceMatrix(self.data)
+    @property
+    def distance_responses(self):
+        return _getDistResponseVariable(self.data,self.selected_response_variable)
+
     
         
     def calculateEmpirical(self,n_bins=50):
@@ -277,6 +354,29 @@ class Variogram(object):
         
         return None 
         
+
+def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_number_of_points=10):
+    """
+    Divides the given geodataset into n*n number of chunks
+    Parameters : 
+        geodataset (GeoDataset) with defined coordinates (geometric column)
+        n_chunks : (int) desired number of chunks per dimension (resulting nxn chunks)
+        minimmum_number_of_points : (int) the minimum number of points for accepting a chunk as valid.
+    """
+    data = geodataset
+    minx,maxx,miny,maxy = _getExtent(data)
+    N = n_chunks
+    xp,dx = np.linspace(minx,maxx,N,retstep=True)
+    yp,dy = np.linspace(miny,maxy,N,retstep=True)
+    xx,yy = np.meshgrid(xp,yp)
+    coordinates_list = [ (xx[i][j],yy[i][j]) for i in range(N) for j in range(N)]
+    from functools import partial
+    tuples = map(lambda (x,y) : partial(_getExtentFromPoint,x,y,step_sizex=dx,step_sizey=dy)(),coordinates_list)
+    chunks = map(lambda (mx,Mx,my,My) : _subselectDataFrameByCoordinates(data,namecolumnx,namecolumny,mx,Mx,my,My),tuples)
+    ## Here we can filter based on a threshold
+    threshold = minimmum_number_of_points
+    chunks_non_empty = filter(lambda df : df.shape[0] > threshold ,chunks)
+    return chunks_non_empty
         
         
 if __name__ == "__main__":

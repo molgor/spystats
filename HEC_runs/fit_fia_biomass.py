@@ -26,9 +26,15 @@ import geopandas as gpd
 from shapely.geometry import Point
 import pandas as pd
 import GPflow as gf
+import statsmodels.formula.api as smf
 #import gpflow as gf
 import numpy as np
 import sys
+sys.path.append('..')
+sys.path.append('/home/hpc/28/escamill/spystats')
+
+from tools import toGeoDataFrame, Variogram
+
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -66,6 +72,9 @@ def subselectDataFrame(pandasDF, minx,maxx,miny,maxy):
 
 
 def fitMatern12Model(X,Y,optimise=True):
+    """
+    The kernel here (k) doesn't have a nugget effect
+    """
     k = gf.kernels.Matern12(2, lengthscales=1, active_dims = [0,1] )
     model = gf.gpr.GPR(X.as_matrix(),Y.as_matrix().reshape(len(Y),1).astype(float),k)
     model.likelihood.variance = 10
@@ -100,7 +109,7 @@ def buildPredictiveSpace(inputGeoDataFrame,GPFlowModel,num_of_predicted_coordina
 
 
 
-def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
+def main(csv_path,minx,maxx,miny,maxy,predicted_size=300,distance_threshold=500000):
     """
     The main batch processing
     """
@@ -112,20 +121,49 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300):
     maxx = maxx
     miny = miny
     maxy = maxy
+    
+    new_data = toGeoDataFrame(pandas_dataframe=data,xcoord_name='LON',ycoord_name='LAT')
+
+    logger.info("Reprojecting to Alberts")
+    ## Reproject to alberts
+    new_data =  new_data.to_crs("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs ")
+    new_data['logBiomass'] = new_data.apply(lambda x : np.log(x.plotBiomass),axis=1)
+    new_data['newLon'] = new_data.apply(lambda c : c.geometry.x, axis=1)
+    new_data['newLat'] = new_data.apply(lambda c : c.geometry.y, axis=1)
+    #new_data.plot(column='SppN')
+    new_data['logBiomass'] = np.log(new_data.plotBiomass)
+    #new_data.logBiomass.plot.hist()
+    
+    logger.info("Fitting Linear Model")
+    #linear model
+    model = smf.ols(formula='logBiomass ~ SppN',data=new_data)
+    results = model.fit()
+    param_model = results.params
+    results.summary()
+    
+    new_data['residuals1'] = results.resid    
+    
+    
+    
     logger.info("Subselecting Region")
-    section = subselectDataFrame(data, minx, maxx, miny, maxy)
-    X = section[['lon','lat']]
-    Y = section['plotBiomass']
+    section = new_data[lambda x:  (x.LON > minx) & (x.LON < maxx) & (x.LAT > miny) & (x.LAT < maxy) ]
+
+    
+    
+    
+    X = section[['newLon','newLat']]
+    Y = section['residuals1']
     logger.info("Fitting GaussianProcess Model")
     model = fitMatern12Model(X, Y, optimise=True)
     param_model = pd.DataFrame(model.get_parameter_dict())
-    param_model.to_csv('biomassmodel_parameters.csv')
-    logger.info("Predicting Points")  
-    space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=predicted_size)
-    space.to_csv('biomasspredicted_points.csv')
+    param_model.to_csv('biomass_residuals_model_parameters.csv')
+    
+    #logger.info("Predicting Points")  
+    #space = buildPredictiveSpace(section, model,num_of_predicted_coordinates=predicted_size)
+    #space.to_csv('biomasspredicted_points.csv')
+    
     logger.info("Finished! Results in: tests1.csv")
-    
-    
+        
     
 if __name__ == "__main__":
     csv_path = sys.argv[1]
