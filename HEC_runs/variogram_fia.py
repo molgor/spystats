@@ -66,11 +66,12 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300,distance_threshold=5000
     new_data['newLat'] = new_data.apply(lambda c : c.geometry.y, axis=1)
     #new_data.plot(column='SppN')
     new_data['logBiomass'] = np.log(new_data.plotBiomass)
+    new_data['logSppN'] = np.log(new_data.SppN)
     #new_data.logBiomass.plot.hist()
     
     logger.info("Fitting Linear Model")
     #linear model
-    model = smf.ols(formula='logBiomass ~ SppN',data=new_data)
+    model = smf.ols(formula='logBiomass ~ logSppN',data=new_data)
     results = model.fit()
     param_model = results.params
     results.summary()
