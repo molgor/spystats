@@ -189,8 +189,13 @@ def calculateEmpiricalVariogram(distances,response_variable,n_bins=50,distance_t
         d = d[ d['dist'] < distance_threshold ]
     # The actual emp. var function     
     empvar =  map(lambda (i,x) : 0.5 * (d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].y.mean()),enumerate(lags))
+    ## Get number of elements here
+    n_points =  map(lambda (i,x) : d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].shape[0],enumerate(lags))
+   
+    
+    
     #self.empirical = empvar
-    results = pd.DataFrame({'lags':lags,'variogram':empvar})
+    results = pd.DataFrame({'lags':lags,'variogram':empvar,'n_points' : n_points})
     
     return results  
  
@@ -243,6 +248,7 @@ class Variogram(object):
         self.lags = []
         self.envelope = pd.DataFrame()
         self.distance_threshold = using_distance_threshold
+        self.n_points = []
   
     @property
     def distance_coordinates(self): 
@@ -271,6 +277,7 @@ class Variogram(object):
         
         self.lags = results.lags
         self.empirical = results.variogram
+        self.n_points = results.n_points
         return self.empirical
         
     def calculateEnvelope(self,num_iterations=99,n_bins=50):
