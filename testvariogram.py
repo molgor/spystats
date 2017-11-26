@@ -39,6 +39,9 @@ new_data['newLon'] = new_data.apply(lambda c : c.geometry.x, axis=1)
 new_data['newLat'] = new_data.apply(lambda c : c.geometry.y, axis=1)
 #new_data.plot(column='SppN')
 new_data['logBiomass'] = np.log(new_data.plotBiomass)
+new_data['logBiomass'] = np.log(new_data.SppN)
+
+
 #new_data.logBiomass.plot.hist()
 
 #linear model
@@ -48,6 +51,15 @@ param_model = results.params
 results.summary()
 
 new_data['residuals1'] = results.resid
+
+
+model2 = smf.ols(formula='logBiomass ~ logSppN',data=new_data)
+results2 = model.fit()
+param_model = results2.params
+results2.summary()
+new_data['residuals2'] = results2.resid
+
+
 
 ## Select a section
 #section = new_data[lambda x:  (x.LON > -90) & (x.LON < -85) & (x.LAT > 30) & (x.LAT < 35) ]
