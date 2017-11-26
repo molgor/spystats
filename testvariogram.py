@@ -39,7 +39,7 @@ new_data['newLon'] = new_data.apply(lambda c : c.geometry.x, axis=1)
 new_data['newLat'] = new_data.apply(lambda c : c.geometry.y, axis=1)
 #new_data.plot(column='SppN')
 new_data['logBiomass'] = np.log(new_data.plotBiomass)
-new_data['logBiomass'] = np.log(new_data.SppN)
+new_data['logSppN'] = np.log(new_data.SppN)
 
 
 #new_data.logBiomass.plot.hist()
