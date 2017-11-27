@@ -50,14 +50,14 @@ results = model.fit()
 param_model = results.params
 results.summary()
 
-new_data['residuals1'] = results.resid
+new_data['residuals1sppn'] = results.resid
 
 
 model2 = smf.ols(formula='logBiomass ~ logSppN',data=new_data)
 results2 = model2.fit()
 param_model = results2.params
 results2.summary()
-new_data['residuals2'] = results2.resid
+new_data['residual23logsppn'] = results2.resid
 
 
 
