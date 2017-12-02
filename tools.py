@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 """
 Tools for analysing spatial data
-================================
+===================
 Requires:
     * Pandas
     * GeoPandas
@@ -28,6 +28,7 @@ import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point
 import scipy.spatial as sp
+import scipy.special as special
 import numpy as np
 import matplotlib.pyplot as plt
 import logging
@@ -43,7 +44,7 @@ logger = logging.getLogger(__name__)
 
 
 
-
+## These are function for handling dataframes and creating subsets.
 def toGeoDataFrame(pandas_dataframe,xcoord_name,ycoord_name,srs = 'epsg:4326'):
     """
     Convert Pandas objcet to GeoDataFrame
@@ -62,13 +63,6 @@ def toGeoDataFrame(pandas_dataframe,xcoord_name,ycoord_name,srs = 'epsg:4326'):
     new_data.crs = {'init':'epsg:4326'}
     return new_data
 
-
-
-
-
-
-
-
 def _subselectDataFrameByCoordinates(dataframe,namecolumnx,namecolumny,minx,maxx,miny,maxy):
     """
     Returns a subselection by coordinates using the dataframe/
@@ -79,9 +73,6 @@ def _subselectDataFrameByCoordinates(dataframe,namecolumnx,namecolumny,minx,maxx
     maxy = float(maxy)
     section = dataframe[lambda x:  (x[namecolumnx] > minx) & (x[namecolumnx] < maxx) & (x[namecolumny] > miny) & (x[namecolumny] < maxy) ]
     return section
-
-
-
 
 def _getExtent(geodataframe):
     """
@@ -96,7 +87,6 @@ def _getExtent(geodataframe):
 
     return (minx,maxx,miny,maxy)
   
-
 def _getExtentFromPoint(x,y,step_sizex,step_sizey):
     """
     Returns a tuple (4) specifying the minx,maxx miny, maxy based on a given point and a step size.
@@ -107,23 +97,6 @@ def _getExtentFromPoint(x,y,step_sizex,step_sizey):
     maxx = x + step_sizex
     maxy = y + step_sizey
     return (minx,maxx,miny,maxy)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def _getDistanceMatrix(geopandas_dataset):
     """
@@ -136,8 +109,6 @@ def _getDistanceMatrix(geopandas_dataset):
     coords = zip(data.centroid.x,data.centroid.y)
     dM = sp.distance_matrix(coords,coords,p=2.0)
     return dM
-    
-    
     
 def _getDistResponseVariable(geopandas_dataset,response_variable_name):
     """ 
@@ -159,14 +130,7 @@ def _getDistResponseVariable(geopandas_dataset,response_variable_name):
 
 
 
-
-
-
-
-
-
-
-
+## This  functions are for defining an empirical variogram
 def calculateEmpiricalVariogram(distances,response_variable,n_bins=50,distance_threshold=False):
     """
     Returns the empirical variogram given by the formula
@@ -189,8 +153,13 @@ def calculateEmpiricalVariogram(distances,response_variable,n_bins=50,distance_t
         d = d[ d['dist'] < distance_threshold ]
     # The actual emp. var function     
     empvar =  map(lambda (i,x) : 0.5 * (d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].y.mean()),enumerate(lags))
+    ## Get number of elements here
+    n_points =  map(lambda (i,x) : d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].shape[0],enumerate(lags))
+   
+    
+    
     #self.empirical = empvar
-    results = pd.DataFrame({'lags':lags,'variogram':empvar})
+    results = pd.DataFrame({'lags':lags,'variogram':empvar,'n_points' : n_points})
     
     return results  
  
@@ -243,6 +212,7 @@ class Variogram(object):
         self.lags = []
         self.envelope = pd.DataFrame()
         self.distance_threshold = using_distance_threshold
+        self.n_points = []
   
     @property
     def distance_coordinates(self): 
@@ -271,6 +241,7 @@ class Variogram(object):
         
         self.lags = results.lags
         self.empirical = results.variogram
+        self.n_points = results.n_points
         return self.empirical
         
     def calculateEnvelope(self,num_iterations=99,n_bins=50):
@@ -355,6 +326,10 @@ class Variogram(object):
         return None 
         
 
+
+## This function is useful for calculating the empirical variogram using the chunk method
+## Attention: this method does not implements a neighbouring pointa (out of the edge effect)
+
 def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_number_of_points=10):
     """
     Divides the given geodataset into n*n number of chunks
@@ -378,6 +353,96 @@ def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_num
     chunks_non_empty = filter(lambda df : df.shape[0] > threshold ,chunks)
     return chunks_non_empty
         
+## Theoretical variograms models.
+
+def gaussianVariogram(h,sill=0,range_a=0,nugget=0):
+    """
+    The Gaussian Variogram, positive SEMI definite, and it's not recommended to use.
+    
+    $$\gamma (h)=(s-n)\left(1-\exp \left(-{\frac  {h^{2}}{r^{2}a}}\right)\right)+n1_{{(0,\infty )}}(h)$$
+    
+    Parameters:
+        h : (Float or Numpy Array) Distances to evaluate
+        sill : Float
+        range_a : Float
+        nugget : Float 
+        
+    """
+    if isinstance(h,np.ndarray):
+        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+    else:
+        Ih = 1.0 if h >= 0 else 0.0
+    #Ih = 1.0 if h >= 0 else 0.0    
+    g_h = ((sill - nugget)*(1 - np.exp(-(h**2 / range_a**2)))) + nugget*Ih
+    return g_h
+
+def exponentialVariogram(h,sill=0,range_a=0,nugget=0):
+    """
+    The exponential variogram model
+    
+    $$\gamma (h)=(s-n)(1-\exp(-h/(ra)))+n1_{{(0,\infty )}}(h)$$
+    
+        Parameters:
+        h : (Float or Numpy Array) Distances to evaluate
+        sill : Float
+        range_a : Float
+        nugget : Float 
+        
+    """
+    
+    if isinstance(h,np.ndarray):
+        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+    else:
+        Ih = 1.0 if h >= 0 else 0.0
+    g_h = (sill - nugget)*(1 - np.exp(-h/range_a)) #+ (nugget*Ih)
+    return g_h
+
+def sphericalVariogram(h,sill=0,range_a=0,nugget=0):
+    """
+    The spherical variogram 
+    
+    $$\gamma (h)=(s-n)\left(\left({\frac  {3h}{2r}}-{\frac  {h^{3}}{2r^{3}}}\right)1_{{(0,r)}}(h)+1_{{[r,\infty )}}(h)\right)+n1_{{(0,\infty )}}(h))$$
+
+        Parameters:
+        h : (Float or Numpy Array) Distances to evaluate
+        sill : Float
+        range_a : Float
+        nugget : Float     
+
+    """
+    
+    if isinstance(h,np.ndarray):
+        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        I0r = np.array([1.0 if hi <= range_a else 0.0 for hi in h])
+        Irinf = [1.0 if hi > range_a else 0.0 for hi in h]
+    else:
+        Ih = 1.0 if h >= 0 else 0.0
+        I0r = [1.0 if hi <= range_a else 0.0 for hi in h]
+        Irinf = [1.0 if hi > range_a else 0.0 for hi in h]
+    g_h = (sill - nugget)*((3*h / float(2*range_a))*I0r + Irinf) - (h**3 / float(2*range_a)) + (nugget*Ih)
+    return g_h
+
+
+def MaternVariogram(h,range_a,kappa=0.5,sigma=100.0):
+    """
+    The Matern Variogram of order $\kappa$.
+   
+   $$\gamma(h) = \sigma^2 \Big(1 - \frac{2^{1-\kappa}}{\Gamma(\kappa)}\Big) \Big(\frac{h}{r}\Big)^{\kappa}K_\kappa \Big(\frac{h}{r}\Big)$$
+    Let:
+         a = $$ 
+        b = $$
+        K_v = Modified Bessel function of the second kind of real order v
+    """
+    
+    a = np.power(2, 1 - kappa) / special.gamma(kappa)
+    #b = (np.sqrt(2 * kappa) / range_a) * h
+    b = (h / float(range_a))
+    K_v = special.kv(kappa,b)
+    
+    #kh = sigma * a * np.power(b,kappa) * K_v
+    kh = sigma * (1 - (a * np.power(b,kappa) * K_v) )
+    return kh
+    
         
 if __name__ == "__main__":
     __package__ = "spystats"

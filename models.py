@@ -3,7 +3,7 @@
 """
 
 Statistical Models
-===============================================================================================
+===========
 
 This module combines traversal strategies for visiting and storing the spatial tree-structures.
 
@@ -32,6 +32,8 @@ def corr_exp_ij(distance,phi=1.0):
     This function calculates the correlation function of an exponential model with parameter phi.
     Returns :
         correlation value for distance 'distance'
+    notes
+    
     """
     return np.exp(-(distance / phi))
 
@@ -153,7 +155,7 @@ zeros = lambda list_of_points : np.zeros(np.sqrt(len(list_of_points))**2)
 simulateWithThisPoints = lambda list_of_points : map(lambda Sigma : sp.random.multivariate_normal(zeros(list_of_points),Sigma.reshape(len(list_of_points),len(list_of_points))),covarianceMatricesModels(list_of_points))
 
 
-
+## Statistical Models
 
 
 
