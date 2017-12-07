@@ -330,6 +330,38 @@ class Variogram(object):
 ## This function is useful for calculating the empirical variogram using the chunk method
 ## Attention: this method does not implements a neighbouring pointa (out of the edge effect)
 
+
+    def fitTheoreticalVariogramModel(self,model,parameter_set):
+        """
+        Fits a valid model (tools.model) to the empirical variogram object as base.
+    
+        Parameters:
+            model : a Valid model (function)
+            parameter_set : a tuple containing the init guesses for the parameters to be fitted from the model
+    
+        Returns:
+            A function with the optimized parameters.
+        """
+        logger.info("Removing possible NA's")
+        self.envelope = self.envelope.dropna()
+        variogram = self.envelope.variogram.values
+        lags = self.envelope.lags.values
+        from scipy.optimize import curve_fit
+        #try:
+        best_params, covar_model = curve_fit(model, xdata=lags, ydata=variogram, p0=parameter_set)
+        #except:
+        #    logger.error("Model selected doesn´t support more than 3 parametes")
+        
+        teovarmodel = theoreticalVariogram(model,*best_params)
+        logger.info("Adding model to the attributes space")
+        setattr(self,'model',model)
+        setattr(self,'model_params',best_params)
+        setattr(self,'model_covar',covar_model)
+    
+        return (teovarmodel,{'parameters':best_params,'covar_model':covar_model})
+
+
+
 def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_number_of_points=10):
     """
     Divides the given geodataset into n*n number of chunks
@@ -394,7 +426,7 @@ def exponentialVariogram(h,sill=0,range_a=0,nugget=0):
         Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
     else:
         Ih = 1.0 if h >= 0 else 0.0
-    g_h = (sill - nugget)*(1 - np.exp(-h/range_a)) #+ (nugget*Ih)
+    g_h = (sill - nugget)*(1 - np.exp(-h/range_a)) + (nugget*Ih)
     return g_h
 
 def sphericalVariogram(h,sill=0,range_a=0,nugget=0):
@@ -423,26 +455,164 @@ def sphericalVariogram(h,sill=0,range_a=0,nugget=0):
     return g_h
 
 
-def MaternVariogram(h,range_a,kappa=0.5,sigma=100.0):
+
+#def MaternVariogram(h,range_a,nugget=40,sill=100,kappa=0.5):
+def maternVariogram(h,sill=1,range_a=100,nugget=40,kappa=0.5):    
     """
     The Matern Variogram of order $\kappa$.
    
-   $$\gamma(h) = \sigma^2 \Big(1 - \frac{2^{1-\kappa}}{\Gamma(\kappa)}\Big) \Big(\frac{h}{r}\Big)^{\kappa}K_\kappa \Big(\frac{h}{r}\Big)$$
+    $$ \gamma(h) = nugget + (sill (1 - (\farc{1}{2^{\kappa -1}} \Gamma(\kappa) (\frac{h}{r})^{\kappa} K_\kappa \Big(\frac{h}{r}\Big)$$
+    
     Let:
          a = $$ 
         b = $$
         K_v = Modified Bessel function of the second kind of real order v
     """
     
-    a = np.power(2, 1 - kappa) / special.gamma(kappa)
+    #a = np.power(2, 1 - kappa) / special.gamma(kappa)
     #b = (np.sqrt(2 * kappa) / range_a) * h
+    a = 1 / np.power(2,kappa - 1 ) * special.gamma(kappa)
+    
     b = (h / float(range_a))
     K_v = special.kv(kappa,b)
     
     #kh = sigma * a * np.power(b,kappa) * K_v
-    kh = sigma * (1 - (a * np.power(b,kappa) * K_v) )
-    return kh
+    #kh = (sill - nugget) * ( 1 - (a * np.power(b,kappa) * K_v))
+    kh = nugget + (sill * ( 1 - (a * np.power(b,kappa) * K_v)))
+
+    kh = np.nan_to_num(kh)
+
+    return kh   
+
+def theoreticalVariogram(model_function,sill,range_a,nugget,kappa=0):
+    if kappa == 0:
+        return lambda x : model_function(x,sill,range_a,nugget)
+    else: 
+        return lambda x : model_function(x,sill,range_a,nugget,kappa)
+
+class VariogramModel(object):
+    """
+    This class specifies several variogram models.
+    """
+    def __init__(self,sill=0,range_a=0,nugget=0):
+        """
+        Constructor:
+            optional parameters for defining the model.
+        """
+        self.sill = sill
+        self.range_a = range_a
+        self.nugget = nugget
+        self.model = []
+        
+    def __repr__(self):
+        return "< An abstract Variogram Model>"
+
+    @property
+    def f(self):
+        return lambda x : self.model(x,self.sill,self.range_a,self.nugget)
+
+
+    def fit(self,emp_variogram,init_params=[]):
+        """
+        Fits a the model to an empirical variogram object as base.
     
+        Parameters:
+            emp_variogram : (Variogram instance)
+            parameter_set : a tuple containing the init guesses for the parameters to be fitted from the model
+    
+        Returns:
+            A function with the optimized parameters
+            
+        """
+        logger.info("Removing possible NA's")
+        envelope = emp_variogram.envelope.dropna()
+        variogram = envelope.variogram.values
+        lags = envelope.lags.values
+        from scipy.optimize import curve_fit
+        if not init_params:
+            init_params = [self.sill,self.range_a,self.nugget]
+            if hasattr(self, 'kappa'):
+                init_params.append(self.kappa)
+            
+                
+        try:
+            best_params, covar_model = curve_fit(self.model, xdata=lags, ydata=variogram, p0=init_params)
+        except:
+            logger.error("This model  does not support more than 3 parameters")
+            return None
+        #teovarmodel = theoreticalVariogram(model,*best_params)
+        try:
+            s,r,n = best_params
+            k = 0
+        except:
+            s,r,n,k = best_params
+            
+        self.sill = s
+        self.range_a = r
+        self.nugget = n
+        self.kappa = k
+        
+        logger.info("Adding model to the attributes space")
+        #setattr(self,'model',model)
+        #setattr(self,'model_params',best_params)
+        setattr(self,'model_covar',covar_model)
+    
+        return {'parameters':best_params,'covar_model':covar_model}
+
+        
+
+
+
+
+class ExponentialVariogram(VariogramModel):
+    """
+    Subclass for exponential Variogram
+    """
+    def __init__(self,sill=0,range_a=0,nugget=0):
+        super(ExponentialVariogram, self).__init__(sill,range_a,nugget)
+        self.model = exponentialVariogram
+        self.name = 'exponential'
+    def __repr__(self):
+        return u"< Exponential Variogram : sill %s, range %s, nugget %s >"%(self.sill,self.range_a,self.nugget)
+
+class GaussianVariogram(VariogramModel):
+    """
+    Subclass for Gaussian Variogram
+    """
+    def __init__(self,sill=0,range_a=0,nugget=0):
+        super(GaussianVariogram, self).__init__(sill,range_a,nugget)
+        self.model = gaussianVariogram
+        self.name = 'gaussian'
+    def __repr__(self):
+        return u"< Gaussian Variogram : sill %s, range %s, nugget %s >"%(self.sill,self.range_a,self.nugget)
+
+class SphericalVariogram(VariogramModel):
+    """
+    Subclass for Spherical Variogram
+    """
+    def __init__(self,sill=0,range_a=0,nugget=0):
+        super(SphericalVariogram, self).__init__(sill,range_a,nugget)
+        self.model = sphericalVariogram
+        self.name = 'spherical'
+    def __repr__(self):
+        return u"< Spherical Variogram : sill %s, range %s, nugget %s >"%(self.sill,self.range_a,self.nugget)
+
+
+class MaternVariogram(VariogramModel):
+    """
+    Subclass for a Matern Variogram
+    """   
+    def __init__(self,sill=0,range_a=0,nugget=0,kappa=0):
+        super(MaternVariogram, self).__init__(sill,range_a,nugget)
+        self.kappa = kappa
+        self.model = maternVariogram
+        self.name = 'matern'
+    def __repr__(self):
+        return u"< Matern Variogram : sill %s, range %s, nugget %s, kappa %s >"%(self.sill,self.range_a,self.nugget,self.kappa)
+
+    @property
+    def f(self):
+        return lambda x : self.model(x,self.sill,self.range_a,self.nugget,self.kappa)
         
 if __name__ == "__main__":
     __package__ = "spystats"
