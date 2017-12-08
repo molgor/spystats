@@ -197,7 +197,7 @@ class Variogram(object):
     """
     A class that defines Empirical Variogram objects.
     """
-    def __init__(self,geopandas_dataset,response_variable_name,using_distance_threshold=False):
+    def __init__(self,geopandas_dataset,response_variable_name,model='',using_distance_threshold=False):
         """
         Constructor
             Parameters :
@@ -213,6 +213,7 @@ class Variogram(object):
         self.envelope = pd.DataFrame()
         self.distance_threshold = using_distance_threshold
         self.n_points = []
+        self.model = model
   
     @property
     def distance_coordinates(self): 
@@ -320,6 +321,10 @@ class Variogram(object):
         #points2 = plt.lines(vg.lags,vg.empirical,c='red')
         #plt.show()
         logger.debug("Check which object to return. maybe a figure")
+        
+
+        
+        
         if plot_filename :
             plt.savefig(plot_filename)
         
@@ -330,6 +335,29 @@ class Variogram(object):
 ## This function is useful for calculating the empirical variogram using the chunk method
 ## Attention: this method does not implements a neighbouring pointa (out of the edge effect)
 
+    def fitVariogramModel(self,model_instance,parameter_set=[]):
+        """
+        Fits a valid model (tools.models) to the empirical variogram object as base.
+    
+        Parameters:
+            model_class : the class of a valid model.
+            parameter_set : a tuple containing the init guesses for the parameters to be fitted from the model
+    
+        Returns:
+            A function with the optimized parameters.
+        """
+        if parameter_set:
+            parameter_dict = model_instance.fit(self,parameter_set)
+        else:
+            parameter_dict = model_instance.fit(self)
+        
+        
+        logger.info("Added fitted model to attributes")
+        self.model = model_instance
+        return self.model
+        
+        
+              
 
     def fitTheoreticalVariogramModel(self,model,parameter_set):
         """
@@ -342,6 +370,8 @@ class Variogram(object):
         Returns:
             A function with the optimized parameters.
         """
+        
+        logger.warn("Deprecated. Use: fitVariogramModel")
         logger.info("Removing possible NA's")
         self.envelope = self.envelope.dropna()
         variogram = self.envelope.variogram.values
@@ -484,6 +514,26 @@ def maternVariogram(h,sill=1,range_a=100,nugget=40,kappa=0.5):
 
     return kh   
 
+def whittleVariogram(h,sill=0,range_a=0,nugget=0,alpha=1):
+    """
+    The Whittle Variogram, an alternative to the Gaussian Model.
+    $$\gamma (h)=(s-n)\left(1-\exp \left(-{\frac  {h^{\alpha}}{r^{\alpha}a}}\right)\right)+n1_{{(0,\infty )}}(h)$$
+    
+    Parameters:
+        h : (Float or Numpy Array) Distances to evaluate
+        sill : Float
+        range_a : Float
+        nugget : Float 
+        
+    """
+    if isinstance(h,np.ndarray):
+        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+    else:
+        Ih = 1.0 if h >= 0 else 0.0
+    #Ih = 1.0 if h >= 0 else 0.0    
+    g_h = ((sill - nugget)*(1 - np.exp(-(h**alpha / range_a**alpha)))) + nugget*Ih
+    return g_h
+
 def theoreticalVariogram(model_function,sill,range_a,nugget,kappa=0):
     if kappa == 0:
         return lambda x : model_function(x,sill,range_a,nugget)
@@ -510,6 +560,10 @@ class VariogramModel(object):
     @property
     def f(self):
         return lambda x : self.model(x,self.sill,self.range_a,self.nugget)
+    
+    @property
+    def corr_f(self):
+        return lambda h :  1 - (self.f(h))
 
 
     def fit(self,emp_variogram,init_params=[]):
@@ -537,7 +591,7 @@ class VariogramModel(object):
                 
         try:
             best_params, covar_model = curve_fit(self.model, xdata=lags, ydata=variogram, p0=init_params)
-        except:
+        except TypeError:
             logger.error("This model  does not support more than 3 parameters")
             return None
         #teovarmodel = theoreticalVariogram(model,*best_params)
@@ -585,6 +639,21 @@ class GaussianVariogram(VariogramModel):
         self.name = 'gaussian'
     def __repr__(self):
         return u"< Gaussian Variogram : sill %s, range %s, nugget %s >"%(self.sill,self.range_a,self.nugget)
+
+class WhittleVariogram(VariogramModel):
+    """
+    Subclass for Gaussian Variogram
+    """
+    def __init__(self,sill=0,range_a=0,nugget=0,alpha=1):
+        super(WhittleVariogram, self).__init__(sill,range_a,nugget)
+        self.model = whittleVariogram
+        self.name = 'whittle'
+        self.kappa = alpha
+    def __repr__(self):
+        return u"< Whittle Variogram : sill %s, range %s, nugget %s, alpha%s >"%(self.sill,self.range_a,self.nugget,self.kappa)
+
+
+
 
 class SphericalVariogram(VariogramModel):
     """
