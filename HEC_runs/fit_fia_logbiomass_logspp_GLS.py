@@ -109,12 +109,17 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     emp_var_log_log = emp_var_log_log.dropna()
     vdata = gvg.envelope.dropna()
     
-    logger.info("Instantiating Whittle Model...")
-    whittle_model = tools.WhittleVariogram(sill=0.345,range_a=100000,nugget=0.33,alpha=1.0)
-    logger.info("fitting Whittle Model with the empirical variogram")
-    tt = gvg.fitVariogramModel(whittle_model)
-    logger.info("Whittle Model fitted")
-    
+    #logger.info("Instantiating Whittle Model...")
+    #whittle_model = tools.WhittleVariogram(sill=0.345,range_a=100000,nugget=0.33,alpha=1.0)
+    #logger.info("fitting Whittle Model with the empirical variogram")
+    #tt = gvg.fitVariogramModel(whittle_model)
+    #logger.info("Whittle Model fitted")
+
+    logger.info("Instantiating Matern Model...")
+    matern_model = tools.MaternVariogram(sill=0.34,range_a=100000,nugget=0.33,kappa=0.5)
+    logger.info("fitting Matern Model with the empirical variogram")
+    tt = gvg.fitVariogramModel(matern_model)
+    logger.info("Matern Model fitted")    
 
     
     
