@@ -494,22 +494,28 @@ def maternVariogram(h,sill=1,range_a=100,nugget=40,kappa=0.5):
     $$ \gamma(h) = nugget + (sill (1 - (\farc{1}{2^{\kappa -1}} \Gamma(\kappa) (\frac{h}{r})^{\kappa} K_\kappa \Big(\frac{h}{r}\Big)$$
     
     Let:
-         a = $$ 
-        b = $$
+         a = $(2^{\kappa -1} \Gamma(\kappa))^{-1}$ 
+        b = $\frac{h}{\phi}$
         K_v = Modified Bessel function of the second kind of real order v
     """
     
     #a = np.power(2, 1 - kappa) / special.gamma(kappa)
     #b = (np.sqrt(2 * kappa) / range_a) * h
-    a = 1 / np.power(2,kappa - 1 ) * special.gamma(kappa)
+    a = 1 / (np.power(2,kappa - 1 ) * special.gamma(kappa))
     
     b = (h / float(range_a))
-    K_v = special.kv(kappa,b)
+    #Modified bessel function of second kind order kappa evaluated at b
+    K_v_b = special.kv(kappa,b)
     
-    #kh = sigma * a * np.power(b,kappa) * K_v
-    #kh = (sill - nugget) * ( 1 - (a * np.power(b,kappa) * K_v))
-    kh = nugget + (sill * ( 1 - (a * np.power(b,kappa) * K_v)))
-
+    rho_h = a * np.power(b,kappa) * K_v_b
+    
+    kh = sill * (1 - rho_h)
+    
+    ##legacy
+    ##kh = sigma * a * np.power(b,kappa) * K_v
+    ##kh = (sill - nugget) * ( 1 - (a * np.power(b,kappa) * K_v))
+    #kh = nugget + (sill * ( 1 - (a * np.power(b,kappa) * K_v)))
+    ## end legacy
     kh = np.nan_to_num(kh)
 
     return kh   
@@ -561,9 +567,23 @@ class VariogramModel(object):
     def f(self):
         return lambda x : self.model(x,self.sill,self.range_a,self.nugget)
     
-    @property
-    def corr_f(self):
-        return lambda h :  1 - (self.f(h))
+
+    def corr_f(self,h):
+        """
+        Calculates the correlation function based on the given theoretical "intrinsic valid model"
+        
+        """
+        ## correlation function for distances bigger than zero
+        ## See: Diggle & Ribeiro (2006) section 3.5
+        corr_cont = lambda hx :  1 - (self.sill * self.f(hx) / (self.sill + self.nugget))
+        
+        return np.array([1.0 if hx == 0 else corr_cont(hx) for hx in h])
+            
+            
+        #return lambda h :  1 - (self.f(h))
+        #return lambda h :  1 - (self.sill * self.f(h) / (self.sill + self.nugget))
+
+
 
 
     def fit(self,emp_variogram,init_params=[]):

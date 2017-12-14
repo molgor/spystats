@@ -1,0 +1,60 @@
+2017-12-14 18:37:20,632 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:20,632 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:31,301 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:31,301 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:31,459 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:31,459 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:31,485 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:31,485 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:31,487 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:31,487 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:44,099 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:44,099 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:44,099 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:54,993 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:54,993 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:54,993 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:55,026 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:55,026 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:55,026 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:55,055 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:55,055 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:55,055 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:55,060 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:55,060 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:55,060 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:55,081 - __main__ - INFO - Dropping possible Nans
+2017-12-14 18:37:55,081 - __main__ - INFO - Dropping possible Nans
+2017-12-14 18:37:55,081 - __main__ - INFO - Dropping possible Nans
+2017-12-14 18:37:55,091 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 18:37:55,091 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 18:37:55,091 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 18:37:55,094 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 18:37:55,094 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 18:37:55,094 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 18:37:55,122 - __main__ - INFO - Whittle Model fitted
+2017-12-14 18:37:55,122 - __main__ - INFO - Whittle Model fitted
+2017-12-14 18:37:55,122 - __main__ - INFO - Whittle Model fitted
+2017-12-14 18:37:55,125 - __main__ - INFO - Subselecting Region
+2017-12-14 18:37:55,125 - __main__ - INFO - Subselecting Region
+2017-12-14 18:37:55,125 - __main__ - INFO - Subselecting Region
+2017-12-14 18:37:55,138 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 18:37:55,138 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 18:37:55,138 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 18:37:56,044 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 18:37:56,044 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 18:37:56,044 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 18:37:58,479 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 18:37:58,479 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 18:37:58,479 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 18:38:19,974 - __main__ - INFO - Writing to file
+2017-12-14 18:38:19,974 - __main__ - INFO - Writing to file
+2017-12-14 18:38:19,974 - __main__ - INFO - Writing to file
+2017-12-14 18:38:19,992 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 18:38:19,992 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 18:38:19,992 - __main__ - INFO - Finished! Results in: tests1.csv

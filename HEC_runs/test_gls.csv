@@ -1,0 +1,25 @@
+                            GLS Regression Results                            
+==============================================================================
+Dep. Variable:             logBiomass   R-squared:                       0.171
+Model:                            GLS   Adj. R-squared:                  0.170
+Method:                 Least Squares   F-statistic:                     564.1
+Date:                Thu, 14 Dec 2017   Prob (F-statistic):          1.50e-113
+Time:                        18:38:19   Log-Likelihood:                -3301.1
+No. Observations:                2744   AIC:                             6606.
+Df Residuals:                    2742   BIC:                             6618.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [95.0% Conf. Int.]
+------------------------------------------------------------------------------
+Intercept      8.3170     14.454      0.575      0.565       -20.024    36.658
+logSppN        0.4659      0.020     23.743      0.000         0.427     0.504
+==============================================================================
+Omnibus:                      169.100   Durbin-Watson:                   2.090
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              692.162
+Skew:                          -0.125   Prob(JB):                    5.00e-151
+Kurtosis:                       5.448   Cond. No.                         737.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

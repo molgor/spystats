@@ -1,0 +1,211 @@
+2017-12-14 18:37:20,632 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:31,301 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:31,459 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:31,485 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:31,487 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:44,099 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:37:54,993 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:37:55,026 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:37:55,055 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:37:55,060 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:37:55,081 - __main__ - INFO - Dropping possible Nans
+2017-12-14 18:37:55,091 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 18:37:55,094 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 18:37:55,122 - __main__ - INFO - Whittle Model fitted
+2017-12-14 18:37:55,125 - __main__ - INFO - Subselecting Region
+2017-12-14 18:37:55,138 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 18:37:56,044 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 18:37:58,479 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 18:38:19,974 - __main__ - INFO - Writing to file
+2017-12-14 18:38:19,992 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 18:41:35,592 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 18:41:48,370 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 18:41:48,409 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 18:41:48,442 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 18:41:48,444 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 18:41:48,462 - __main__ - INFO - Dropping possible Nans
+2017-12-14 18:41:48,472 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 18:41:48,474 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 18:41:48,494 - __main__ - INFO - Whittle Model fitted
+2017-12-14 18:41:48,497 - __main__ - INFO - Subselecting Region
+2017-12-14 18:41:48,514 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 18:41:49,581 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 18:41:52,797 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 18:42:18,773 - __main__ - INFO - Writing to file
+2017-12-14 18:42:18,789 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 19:09:09,175 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 19:09:22,650 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 19:09:22,680 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 19:09:22,704 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 19:09:22,705 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 19:09:22,715 - __main__ - INFO - Dropping possible Nans
+2017-12-14 19:09:22,723 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 19:09:22,725 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 19:09:22,742 - __main__ - INFO - Whittle Model fitted
+2017-12-14 19:09:22,751 - __main__ - INFO - Subselecting Region
+2017-12-14 19:09:22,787 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 19:09:23,763 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 19:09:26,596 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 19:09:55,184 - __main__ - INFO - Writing to file
+2017-12-14 19:09:55,203 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 19:23:49,236 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 19:24:04,288 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 19:24:04,317 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 19:24:04,340 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 19:24:04,341 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 19:24:04,352 - __main__ - INFO - Dropping possible Nans
+2017-12-14 19:24:04,359 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 19:24:04,361 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 19:24:04,374 - __main__ - INFO - Whittle Model fitted
+2017-12-14 19:24:04,376 - __main__ - INFO - Subselecting Region
+2017-12-14 19:24:04,388 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 19:24:05,390 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 19:24:08,060 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 19:24:35,413 - __main__ - INFO - Writing to file
+2017-12-14 19:24:35,428 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 19:42:31,991 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 19:42:48,070 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 19:42:48,142 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 19:42:48,167 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 19:42:48,168 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 19:42:48,178 - __main__ - INFO - Dropping possible Nans
+2017-12-14 19:42:48,186 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 19:42:48,190 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 19:42:48,206 - __main__ - INFO - Whittle Model fitted
+2017-12-14 19:42:48,207 - __main__ - INFO - Subselecting Region
+2017-12-14 19:42:48,221 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 19:42:49,292 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 19:42:51,756 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 19:43:19,435 - __main__ - INFO - Writing to file
+2017-12-14 19:43:19,532 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 19:52:11,655 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 19:52:21,826 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 19:52:21,856 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 19:52:21,882 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 19:52:21,883 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 19:52:21,896 - __main__ - INFO - Dropping possible Nans
+2017-12-14 19:52:21,907 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 19:52:21,909 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 19:52:21,924 - __main__ - INFO - Whittle Model fitted
+2017-12-14 19:52:21,927 - __main__ - INFO - Subselecting Region
+2017-12-14 19:52:21,946 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 19:52:22,725 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 19:52:24,618 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 19:52:43,607 - __main__ - INFO - Writing to file
+2017-12-14 19:52:43,620 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 19:54:32,390 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 19:54:42,911 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 19:54:42,941 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 19:54:42,968 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 19:54:42,969 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 19:54:42,981 - __main__ - INFO - Dropping possible Nans
+2017-12-14 19:54:42,988 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 19:54:42,992 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 19:54:43,002 - __main__ - INFO - Whittle Model fitted
+2017-12-14 19:54:43,003 - __main__ - INFO - Subselecting Region
+2017-12-14 19:54:43,013 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 19:54:43,773 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 19:54:45,522 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 19:55:07,058 - __main__ - INFO - Writing to file
+2017-12-14 19:55:07,090 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 20:30:45,575 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 20:30:57,235 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 20:30:57,262 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 20:30:57,287 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 20:30:57,288 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 20:30:57,298 - __main__ - INFO - Dropping possible Nans
+2017-12-14 20:30:57,305 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 20:30:57,306 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 20:30:57,319 - __main__ - INFO - Whittle Model fitted
+2017-12-14 20:30:57,320 - __main__ - INFO - Subselecting Region
+2017-12-14 20:30:57,328 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 20:30:58,320 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 21:32:49,448 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 21:33:00,179 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 21:33:00,209 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 21:33:00,234 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 21:33:00,238 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 21:33:00,249 - __main__ - INFO - Dropping possible Nans
+2017-12-14 21:33:00,260 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 21:33:00,266 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 21:33:00,278 - __main__ - INFO - Whittle Model fitted
+2017-12-14 21:33:00,283 - __main__ - INFO - Subselecting Region
+2017-12-14 21:33:00,297 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 21:33:01,164 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 21:33:10,209 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 21:33:36,880 - __main__ - INFO - Writing to file
+2017-12-14 21:33:36,908 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 21:38:31,535 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 21:38:42,273 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 21:38:42,313 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 21:38:42,343 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 21:38:42,346 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 21:38:42,360 - __main__ - INFO - Dropping possible Nans
+2017-12-14 21:38:42,368 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 21:38:42,374 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 21:38:42,385 - __main__ - INFO - Whittle Model fitted
+2017-12-14 21:38:42,390 - __main__ - INFO - Subselecting Region
+2017-12-14 21:38:42,400 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 21:38:43,279 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 21:38:53,377 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 21:39:18,260 - __main__ - INFO - Writing to file
+2017-12-14 21:39:18,275 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 21:43:11,047 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 21:43:23,307 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 21:43:23,355 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 21:43:23,395 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 21:43:23,396 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 21:43:23,410 - __main__ - INFO - Dropping possible Nans
+2017-12-14 21:43:23,421 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 21:43:23,423 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 21:43:23,437 - __main__ - INFO - Whittle Model fitted
+2017-12-14 21:43:23,438 - __main__ - INFO - Subselecting Region
+2017-12-14 21:43:23,452 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 21:43:24,330 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 21:43:35,969 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 21:43:56,830 - __main__ - INFO - Writing to file
+2017-12-14 21:43:56,846 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 22:11:01,900 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 22:11:12,723 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 22:11:12,767 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 22:11:12,798 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 22:11:12,800 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 22:11:12,811 - __main__ - INFO - Dropping possible Nans
+2017-12-14 22:11:12,820 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 22:11:12,824 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 22:11:12,840 - __main__ - INFO - Whittle Model fitted
+2017-12-14 22:11:12,843 - __main__ - INFO - Subselecting Region
+2017-12-14 22:11:12,854 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 22:11:13,787 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 22:11:15,995 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 22:11:37,204 - __main__ - INFO - Writing to file
+2017-12-14 22:11:37,219 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-14 22:25:30,861 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-14 22:25:40,818 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-14 22:25:40,846 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-14 22:25:40,865 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-14 22:25:40,867 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-14 22:25:40,875 - __main__ - INFO - Dropping possible Nans
+2017-12-14 22:25:40,881 - __main__ - INFO - Instantiating Whittle Model...
+2017-12-14 22:25:40,883 - __main__ - INFO - fitting Whittle Model with the empirical variogram
+2017-12-14 22:25:40,896 - __main__ - INFO - Whittle Model fitted
+2017-12-14 22:25:40,898 - __main__ - INFO - Subselecting Region
+2017-12-14 22:25:40,905 - __main__ - INFO - Calculating Distance Matrix
+2017-12-14 22:25:41,651 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-14 22:26:38,912 - __main__ - INFO - Fitting linear model using GLS
+2017-12-14 22:27:02,147 - __main__ - INFO - Writing to file
+2017-12-14 22:27:02,164 - __main__ - INFO - Finished! Results in: tests1.csv

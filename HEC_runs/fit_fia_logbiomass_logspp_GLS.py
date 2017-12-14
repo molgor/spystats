@@ -142,7 +142,7 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     
     logger.info("Finished! Results in: tests1.csv")
     
-    
+    return {'dataframe':new_data,'variogram':gvg,'modelGLS':model1}
     
 if __name__ == "__main__":
     plotdata_path = sys.argv[1]
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     maxx = float(sys.argv[4])
     miny = float(sys.argv[5])
     maxy = float(sys.argv[6])
-    main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy)
+    results = main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy)
 
 
 
@@ -161,17 +161,22 @@ if __name__ == "__main__":
 ##maxx = -80
 ##miny = 30
 ##maxy = 35
-### PATH information
+
+
+### PATH information for running in the Biospytial container
 #plotdata_path = "/RawDataCSV/idiv_share/plotsClimateData_11092017.csv"
-#empirical_data_path = "./HEC_runs/results/logbiomas_logsppn_res.csv"
+#empirical_data_path = "/apps/external_plugins/spystats/HEC_runs/results/logbiomas_logsppn_res.csv"
+
+## Information for HEC path
 ## For HEC path in /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv
 
 ## For running ALL DATA SET
-## python fit_fia_logbiomass_logspp_GLS /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv ./HEC_runs/results/logbiomas_logsppn_res.csv -90 -80 30 40  
+#-130 -60 25 50
+#python /home/hpc/28/escamill/spystats/HEC_runs/fit_fia_logbiomass_logspp_GLS.py /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv /home/hpc/28/escamill/spystats/HEC_runs/results/logbiomas_logsppn_res.csv -130 -60 25 50
 
 ## Test small region
-## python fit_fia_logbiomass_logspp_GLS /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv ./HEC_runs/results/logbiomas_logsppn_res.csv -90 -80 30 40  
-
+# -85 -80 30 35
+#python /home/hpc/28/escamill/spystats/HEC_runs/fit_fia_logbiomass_logspp_GLS.py /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv /home/hpc/28/escamill/spystats/HEC_runs/results/logbiomas_logsppn_res.csv -85 -80 30 35  
 
 ## Checar la importacion de la libreria spystats
 
