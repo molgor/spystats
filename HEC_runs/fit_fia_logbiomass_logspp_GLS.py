@@ -63,7 +63,6 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     The main batch processing
     """
     
-    data = pd.read_csv(csv_path)
     minx = minx
     maxx = maxx
     miny = miny
