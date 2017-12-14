@@ -152,8 +152,7 @@ if __name__ == "__main__":
     maxx = float(sys.argv[4])
     miny = float(sys.argv[5])
     maxy = float(sys.argv[6])
-    predicted_size = float(sys.argv[7])
-    main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy,predicted_size)
+    main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy)
 
 
 
