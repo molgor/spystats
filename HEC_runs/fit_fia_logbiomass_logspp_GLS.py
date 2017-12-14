@@ -18,7 +18,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pylab as plt
 import statsmodels.formula.api as smf
-from external_plugins.spystats import tools
+import sys
+sys.path.append('..')
+sys.path.append('/home/hpc/28/escamill/spystats')
+import tools
 import statsmodels.regression.linear_model as lm
 import statsmodels.api as sm
 import logging
@@ -162,11 +165,21 @@ if __name__ == "__main__":
 ##maxy = 35
 ### PATH information
 #plotdata_path = "/RawDataCSV/idiv_share/plotsClimateData_11092017.csv"
-#empirical_data_path = "../HEC_runs/results/logbiomas_logsppn_res.csv"
+#empirical_data_path = "./HEC_runs/results/logbiomas_logsppn_res.csv"
+## For HEC path in /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv
 
-## For running 
-## python fit_fia_sppn.py /path/to/csv -90 -80 30 40 300 
-#python fit_fia_sppn.py /RawDataCSV/idiv_share/plotsClimateData_11092017.csv -90 -80 30 40 300 
+## For running ALL DATA SET
+## python fit_fia_logbiomass_logspp_GLS /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv ./HEC_runs/results/logbiomas_logsppn_res.csv -90 -80 30 40  
+
+## Test small region
+## python fit_fia_logbiomass_logspp_GLS /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv ./HEC_runs/results/logbiomas_logsppn_res.csv -90 -80 30 40  
+
+
+## Checar la importacion de la libreria spystats
+
+
+
+#python fit_fia_sppn.py /RawDataCSV/idiv_share/plotsClimateData_11092017.csv -85 -80 30 35  
 ## In hec
 #python fit_fia_sppn.py /home/hpc/28/escamill/csv_data/idiv/plotsClimateData_11092017.csv -90 -80 30 40 300 
 
