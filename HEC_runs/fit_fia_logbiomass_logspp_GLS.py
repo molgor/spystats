@@ -130,7 +130,7 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     
     ## new code
     section = tools._subselectDataFrameByCoordinates(new_data,'LON','LAT',minx,maxx,miny,maxy)
-    secvg = tools.Variogram(section,'logBiomass',model=whittle_model)
+    secvg = tools.Variogram(section,'logBiomass',model=matern_model)
     logger.info("Calculating Distance Matrix")
     MMdist = secvg.distance_coordinates.flatten()
     logger.info("Calculating Correlation based on theoretical model")
