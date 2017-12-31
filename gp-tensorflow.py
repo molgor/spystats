@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 plt.style.use('ggplot')
 # %matplotlib inline
 
-N = 500
+N = 2000
 phi = 0.02
 sigma2 = 5
 nugget = 0.8
@@ -123,4 +123,23 @@ while np.abs(old_loss - loss) > tol:
 #     print(step, sess1.run(tf_loss, feed_dict), sess1.run(tf_beta), sess1.run(tf_phi),
 #             sess1.run(tf_sigma2), sess1.run(tf_nugget))
 
+# 51 2979.12 [ 5.28443861] 0.0152085 4.81193 0.621492
+# 999 367.15 [ 5.26065683] 0.0239065 5.43957 0.711608
+
+# STOCHASTIC GRADIENT DESCENT OPTIMIZER -------------------------------------------
+train_step = tf.train.GradientDescentOptimizer(0.002).minimize(tf_loss)
+sess1 = tf.Session()
+sess1.run(tf.global_variables_initializer())
+batch_size = 200
+batches = N // batch_size + (N % batch_size != 0)
+for step in range(1000):
+    i_batch = (step % batches) * batch_size
+    feed_dict = {
+            tf_x: X[i_batch:i_batch + batch_size],
+            tf_dis: dis[i_batch:i_batch + batch_size, i_batch:i_batch + batch_size],
+            tf_y: Y[i_batch:i_batch + batch_size]
+            }
+    sess1.run(train_step, feed_dict)
+    print(step, sess1.run(tf_loss, feed_dict), sess1.run(tf_beta), sess1.run(tf_phi),
+            sess1.run(tf_sigma2), sess1.run(tf_nugget))
 
