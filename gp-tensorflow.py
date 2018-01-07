@@ -24,7 +24,7 @@ cov = cor * sigma2
 
 mu = np.sum(X * beta, 1)
 S = np.random.multivariate_normal(np.zeros(N), cov) +\
-        np.random.normal(size = N) * nugget
+        np.random.normal(size = N) * np.sqrt(nugget)
 Y = mu + S
 Y = Y.reshape([-1, 1])
 # plt.scatter(coords[:, 0], Y)
