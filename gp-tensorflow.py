@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import scipy.spatial.distance as sp
 from matplotlib import pyplot as plt
+from datetime import datetime
 plt.style.use('ggplot')
 # %matplotlib inline
 
@@ -103,12 +104,16 @@ old_loss = 10000
 loss = 0
 tol = 0.0001
 step = 0
+start_time = datetime.now()
 while np.abs(old_loss - loss) > tol:
     step += 1
     old_loss = loss
     _, loss = sess.run([train_op, tf_loss], feed_dict)
     print(step, sess.run(tf_loss, feed_dict), sess.run(tf_beta), sess.run(tf_phi),
             sess.run(tf_sigma2), sess.run(tf_nugget))
+time_elapsed = datetime.now() - start_time
+print('Time elapsed (hh:mm:ss.ms) {}'.format(time_elapsed))
+# 16.43
 
 # for step in range(200):
 
@@ -132,7 +137,7 @@ sess1 = tf.Session()
 sess1.run(tf.global_variables_initializer())
 batch_size = 200
 batches = N // batch_size + (N % batch_size != 0)
-for step in range(1000):
+for step in range(2000):
     i_batch = (step % batches) * batch_size
     feed_dict = {
             tf_x: X[i_batch:i_batch + batch_size],
