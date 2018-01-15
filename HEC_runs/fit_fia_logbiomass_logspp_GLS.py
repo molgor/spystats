@@ -52,25 +52,12 @@ logger.addHandler(handler)
 #empirical_data_path = "../HEC_runs/results/logbiomas_logsppn_res.csv"
 
 
-
-
-
-
-
-########## Experimental
-def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
+def prepareDataFrame(empirical_data_path):
     """
-    The main batch processing
+    Reads the data and stores it in a geodataframe.
     """
-    
-    minx = minx
-    maxx = maxx
-    miny = miny
-    maxy = maxy
-    
     logging.info("Reading data")
-
-    data = pd.read_csv(plotdata_path)
+    data = pd.read_csv(empirical_data_path)
     new_data = tools.toGeoDataFrame(pandas_dataframe=data,xcoord_name='LON',ycoord_name='LAT')
     ## Reproject to alberts
     logger.info("Reprojecting to Alberts equal area")
@@ -80,28 +67,39 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     new_data['newLat'] = new_data.apply(lambda c : c.geometry.y, axis=1)
     new_data['logBiomass'] = np.log(new_data.plotBiomass)
     new_data['logSppN'] = np.log(new_data.SppN)
-    
+    logger.info("Removing possible duplicates. \n This avoids problems of Non Positive semidefinite")
+    new_data = new_data.drop_duplicates(subset=['newLon','newLat'])
+    return new_data
+
+def fitLinearLogLogModel(geodataframe):
+    """
+    This is a stupid hardcoded function.
+    It's use is only forensic
+    """
     #linear model
     logger.info("Fitting OLS linear model: logBiomass ~ logSppN ")
-    model = smf.ols(formula='logBiomass ~ logSppN',data=new_data)
+    model = smf.ols(formula='logBiomass ~ logSppN',data=geodataframe)
     results = model.fit()
     param_model = results.params
     results.summary()
-    new_data['residuals'] = results.resid
-    
-    logger.info("Removing possible duplicates. \n This avoids problems of Non Positive semidefinite")
-    new_data = new_data.drop_duplicates(subset=['newLon','newLat'])
-    
+    return (model,results)
+
+
+def createMaternVariogram(plotdata_path,geodataframe):
+    """
+    Another tupid function for chunking the tasks
+    """    
+
     ## Read the empirical variogram
     logger.info("Reading the empirical Variogram file")
     thrs_dist = 100000
     
     ## Change here with appropriate path for file
-    empirical_semivariance_log_log = empirical_data_path
+    empirical_semivariance_log_log = plotdata_path
     #### here put the hec calculated 
     logger.info("Instantiating a Variogram object with the values calculated before")
     emp_var_log_log = pd.read_csv(empirical_semivariance_log_log)
-    gvg = tools.Variogram(new_data,'logBiomass',using_distance_threshold=thrs_dist)
+    gvg = tools.Variogram(geodataframe,'logBiomass',using_distance_threshold=thrs_dist)
     gvg.envelope = emp_var_log_log
     gvg.empirical = emp_var_log_log.variogram
     gvg.lags = emp_var_log_log.lags
@@ -119,27 +117,59 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     matern_model = tools.MaternVariogram(sill=0.34,range_a=100000,nugget=0.33,kappa=0.5)
     logger.info("fitting Matern Model with the empirical variogram")
     tt = gvg.fitVariogramModel(matern_model)
-    logger.info("Matern Model fitted")    
+    logger.info("Matern Model fitted")  
+    return (gvg,tt)
 
+
+def buildSpatialStructure(geodataframe,theoretical_model):
+    """
+    Stupid wrapper function for calculating spatial covariance matrix
+    """
+    secvg = tools.Variogram(geodataframe,'logBiomass',model=theoretical_model)
+    logger.info("Calculating Distance Matrix")
+    MMdist = secvg.distance_coordinates.flatten()
+    logger.info("Calculating Correlation based on theoretical model")
+    CovMat = secvg.model.corr_f(MMdist).reshape(len(geodataframe),len(geodataframe))
+    return CovMat
+
+def calculateGLS(geodataframe,CovMat):
+    logger.info("Fitting linear model using GLS")
+    model1 = lm.GLS.from_formula(formula='logBiomass ~ logSppN',data=geodataframe,sigma=CovMat)
+    results = model1.fit()
+    resum = results.summary()
+    return (results,resum)
+
+########## Experimental
+def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
+    """
+    The main batch processing
+    """
+    
+    minx = minx
+    maxx = maxx
+    miny = miny
+    maxy = maxy
+    
+    new_data = prepareDataFrame(empirical_data_path)
     
     
+    model, results = fitLinearLogLogModel(new_data)
+    new_data['residuals'] = results.resid
     
+    
+    gvg,tt = createMaternVariogram(plotdata_path,new_data)
     
     
     logger.info("Subselecting Region")
     
-    ## new code
+    ## make subsection
     section = tools._subselectDataFrameByCoordinates(new_data,'LON','LAT',minx,maxx,miny,maxy)
-    secvg = tools.Variogram(section,'logBiomass',model=matern_model)
-    logger.info("Calculating Distance Matrix")
-    MMdist = secvg.distance_coordinates.flatten()
-    logger.info("Calculating Correlation based on theoretical model")
-    CovMat = secvg.model.corr_f(MMdist).reshape(len(section),len(section))
     
-    logger.info("Fitting linear model using GLS")
-    model1 = lm.GLS.from_formula(formula='logBiomass ~ logSppN',data=section,sigma=CovMat)
-    results = model1.fit()
-    resum = results.summary()
+
+    CovMat = buildSpatialStructure(section,gvg.model)
+    results,resum = calculateGLS(section,CovMat)
+
+    
     logger.info("Writing to file")
     f = open("test_gls.csv",'w')
     f.write(resum.as_text())
@@ -147,16 +177,16 @@ def main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy):
     
     logger.info("Finished! Results in: tests1.csv")
     
-    return {'dataframe':new_data,'variogram':gvg,'modelGLS':model1}
+    return {'dataframe':new_data,'variogram':gvg,'modelGLS':results}
     
 if __name__ == "__main__":
-    plotdata_path = sys.argv[1]
-    empirical_data_path = sys.argv[2]
+    empirical_data_path = sys.argv[1]
+    plotdata_path = sys.argv[2]
     minx = float(sys.argv[3])
     maxx = float(sys.argv[4])
     miny = float(sys.argv[5])
     maxy = float(sys.argv[6])
-    results = main(plotdata_path,empirical_data_path,minx,maxx,miny,maxy)
+    results = main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy)
 
 
 

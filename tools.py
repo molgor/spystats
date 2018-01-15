@@ -672,6 +672,9 @@ class WhittleVariogram(VariogramModel):
     def __repr__(self):
         return u"< Whittle Variogram : sill %s, range %s, nugget %s, alpha%s >"%(self.sill,self.range_a,self.nugget,self.kappa)
 
+    @property
+    def f(self):
+        return lambda x : self.model(x,self.sill,self.range_a,self.nugget,self.kappa)
 
 
 
