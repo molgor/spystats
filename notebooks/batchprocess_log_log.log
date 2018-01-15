@@ -209,3 +209,48 @@
 2017-12-14 22:26:38,912 - __main__ - INFO - Fitting linear model using GLS
 2017-12-14 22:27:02,147 - __main__ - INFO - Writing to file
 2017-12-14 22:27:02,164 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-26 06:00:50,934 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-26 06:00:56,923 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-26 06:00:57,426 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-26 06:00:57,469 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-26 06:00:57,471 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-26 06:00:57,492 - __main__ - INFO - Dropping possible Nans
+2017-12-26 06:00:57,495 - __main__ - INFO - Instantiating Matern Model...
+2017-12-26 06:00:57,496 - __main__ - INFO - fitting Matern Model with the empirical variogram
+2017-12-26 06:00:57,565 - __main__ - INFO - Matern Model fitted
+2017-12-26 06:00:57,566 - __main__ - INFO - Subselecting Region
+2017-12-26 06:00:57,571 - __main__ - INFO - Calculating Distance Matrix
+2017-12-26 06:00:58,165 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-26 06:09:46,782 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-26 06:09:46,782 - __main__ - INFO - Reprojecting to Alberts equal area
+2017-12-26 06:09:52,766 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-26 06:09:52,766 - __main__ - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2017-12-26 06:09:52,784 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-26 06:09:52,784 - __main__ - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2017-12-26 06:09:52,802 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-26 06:09:52,802 - __main__ - INFO - Reading the empirical Variogram file
+2017-12-26 06:09:52,804 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-26 06:09:52,804 - __main__ - INFO - Instantiating a Variogram object with the values calculated before
+2017-12-26 06:09:52,822 - __main__ - INFO - Dropping possible Nans
+2017-12-26 06:09:52,822 - __main__ - INFO - Dropping possible Nans
+2017-12-26 06:09:52,825 - __main__ - INFO - Instantiating Matern Model...
+2017-12-26 06:09:52,825 - __main__ - INFO - Instantiating Matern Model...
+2017-12-26 06:09:52,826 - __main__ - INFO - fitting Matern Model with the empirical variogram
+2017-12-26 06:09:52,826 - __main__ - INFO - fitting Matern Model with the empirical variogram
+2017-12-26 06:09:52,834 - __main__ - INFO - Matern Model fitted
+2017-12-26 06:09:52,834 - __main__ - INFO - Matern Model fitted
+2017-12-26 06:09:52,835 - __main__ - INFO - Subselecting Region
+2017-12-26 06:09:52,835 - __main__ - INFO - Subselecting Region
+2017-12-26 06:09:52,841 - __main__ - INFO - Calculating Distance Matrix
+2017-12-26 06:09:52,841 - __main__ - INFO - Calculating Distance Matrix
+2017-12-26 06:09:53,422 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-26 06:09:53,422 - __main__ - INFO - Calculating Correlation based on theoretical model
+2017-12-26 06:13:25,397 - __main__ - INFO - Fitting linear model using GLS
+2017-12-26 06:13:25,397 - __main__ - INFO - Fitting linear model using GLS
+2017-12-26 06:13:35,368 - __main__ - INFO - Writing to file
+2017-12-26 06:13:35,368 - __main__ - INFO - Writing to file
+2017-12-26 06:13:35,381 - __main__ - INFO - Finished! Results in: tests1.csv
+2017-12-26 06:13:35,381 - __main__ - INFO - Finished! Results in: tests1.csv

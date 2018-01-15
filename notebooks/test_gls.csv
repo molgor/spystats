@@ -2,23 +2,23 @@
 ==============================================================================
 Dep. Variable:             logBiomass   R-squared:                       0.184
 Model:                            GLS   Adj. R-squared:                  0.184
-Method:                 Least Squares   F-statistic:                     619.2
-Date:                Thu, 14 Dec 2017   Prob (F-statistic):          2.03e-123
-Time:                        22:27:02   Log-Likelihood:                -2674.5
-No. Observations:                2744   AIC:                             5353.
-Df Residuals:                    2742   BIC:                             5365.
+Method:                 Least Squares   F-statistic:                     620.1
+Date:                Tue, 26 Dec 2017   Prob (F-statistic):          1.42e-123
+Time:                        06:13:35   Log-Likelihood:                -2673.8
+No. Observations:                2744   AIC:                             5352.
+Df Residuals:                    2742   BIC:                             5363.
 Df Model:                           1                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [95.0% Conf. Int.]
 ------------------------------------------------------------------------------
-Intercept      8.3465      1.407      5.933      0.000         5.588    11.105
-logSppN        0.4531      0.019     24.067      0.000         0.416     0.490
+Intercept      8.3469      1.408      5.929      0.000         5.586    11.107
+logSppN        0.4530      0.019     24.089      0.000         0.416     0.490
 ==============================================================================
-Omnibus:                      176.105   Durbin-Watson:                   2.021
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):              235.328
-Skew:                          -0.575   Prob(JB):                     7.93e-52
-Kurtosis:                       3.858   Cond. No.                         74.7
+Omnibus:                      175.921   Durbin-Watson:                   2.030
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              235.306
+Skew:                          -0.574   Prob(JB):                     8.02e-52
+Kurtosis:                       3.861   Cond. No.                         74.9
 ==============================================================================
 
 Warnings:
