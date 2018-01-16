@@ -85,7 +85,7 @@ def fitLinearLogLogModel(geodataframe):
     return (model,results)
 
 
-def createMaternVariogram(plotdata_path,geodataframe):
+def createVariogram(plotdata_path,geodataframe):
     """
     Another tupid function for chunking the tasks
     """    
@@ -114,10 +114,12 @@ def createMaternVariogram(plotdata_path,geodataframe):
     #logger.info("Whittle Model fitted")
 
     logger.info("Instantiating Matern Model...")
-    matern_model = tools.MaternVariogram(sill=0.34,range_a=100000,nugget=0.33,kappa=0.5)
-    logger.info("fitting Matern Model with the empirical variogram")
-    tt = gvg.fitVariogramModel(matern_model)
-    logger.info("Matern Model fitted")  
+    #matern_model = tools.MaternVariogram(sill=0.34,range_a=100000,nugget=0.33,kappa=0.5)
+    whittle_model = tools.WhittleVariogram(sill=0.34,range_a=100000,nugget=0.0,alpha=3)
+    logger.info("fitting Whittle Model with the empirical variogram")
+    gvg.model = whittle_model
+    tt = gvg.fitVariogramModel(whittle_model)
+    logger.info("Model fitted")  
     return (gvg,tt)
 
 
@@ -127,9 +129,7 @@ def buildSpatialStructure(geodataframe,theoretical_model):
     """
     secvg = tools.Variogram(geodataframe,'logBiomass',model=theoretical_model)
     logger.info("Calculating Distance Matrix")
-    MMdist = secvg.distance_coordinates.flatten()
-    logger.info("Calculating Correlation based on theoretical model")
-    CovMat = secvg.model.corr_f(MMdist).reshape(len(geodataframe),len(geodataframe))
+    CovMat = secvg.calculateCovarianceMatrix()
     return CovMat
 
 def calculateGLS(geodataframe,CovMat):
@@ -157,7 +157,7 @@ def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     new_data['residuals'] = results.resid
     
     
-    gvg,tt = createMaternVariogram(plotdata_path,new_data)
+    gvg,tt = createVariogram(plotdata_path,new_data)
     
     
     logger.info("Subselecting Region")

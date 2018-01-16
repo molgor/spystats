@@ -391,6 +391,15 @@ class Variogram(object):
         return (teovarmodel,{'parameters':best_params,'covar_model':covar_model})
 
 
+    def calculateCovarianceMatrix(self):
+        """
+        Returns an evaluation of the Covariance matrix, given the model stored as attribute.
+        """
+        MMdist = self.distance_coordinates
+        Sigma = self.model.calculateCovarianceMatrixWith(MMdist)
+        return Sigma
+
+
 
 def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_number_of_points=10):
     """
@@ -575,14 +584,26 @@ class VariogramModel(object):
         """
         ## correlation function for distances bigger than zero
         ## See: Diggle & Ribeiro (2006) section 3.5
-        corr_cont = lambda hx :  1 - (self.sill * self.f(hx) / (self.sill + self.nugget))
-        
+        #corr_cont = lambda hx :  1 - (self.sill * self.f(hx) / (self.sill + self.nugget))
+        ## Corrections made and suggested by Erick Chacon
+        corr_cont = lambda hx : (self.sill - self.f(hx)) / (self.sill - self.nugget)
         return np.array([1.0 if hx == 0 else corr_cont(hx) for hx in h])
             
             
         #return lambda h :  1 - (self.f(h))
         #return lambda h :  1 - (self.sill * self.f(h) / (self.sill + self.nugget))
 
+
+    def calculateCovarianceMatrixWith(self,Mdist):
+        """
+        Returns an evaluation of the Covariance matrix, given a distance matrix.
+        Parameters :  numpy Matrix
+        """
+        nuggetId = self.nugget * np.identity(Mdist.shape[0])
+        s2 = self.sill - self.nugget
+        correlMat =  np.array(self.corr_f(Mdist.flatten())).reshape(Mdist.shape)
+        Sigma = (s2 * correlMat) + nuggetId
+        return Sigma
 
 
 
