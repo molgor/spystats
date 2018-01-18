@@ -51,6 +51,13 @@ logger.addHandler(handler)
 #plotdata_path = "/RawDataCSV/idiv_share/plotsClimateData_11092017.csv"
 #empirical_data_path = "../HEC_runs/results/logbiomas_logsppn_res.csv"
 
+def systSelection(dataframe,k):
+    n = len(dataframe)
+    idxs = range(0,n,k)
+    systematic_sample = dataframe.iloc[idxs]
+    return systematic_sample
+
+
 
 def prepareDataFrame(empirical_data_path):
     """
@@ -81,8 +88,8 @@ def fitLinearLogLogModel(geodataframe):
     model = smf.ols(formula='logBiomass ~ logSppN',data=geodataframe)
     results = model.fit()
     param_model = results.params
-    results.summary()
-    return (model,results)
+    summary = results.summary()
+    return (model,summary)
 
 
 def createVariogram(plotdata_path,geodataframe):
@@ -139,6 +146,33 @@ def calculateGLS(geodataframe,CovMat):
     resum = results.summary()
     return (results,resum)
 
+
+def bundleToGLS(geodataframe,theoretical_model):
+    CovMat = buildSpatialStructure(geodataframe, theoretical_model)
+    results,resum = calculateGLS(geodataframe, CovMat)
+    #return results
+    return results.nobs, results.rsquared, results.params, results.pvalues, results.conf_int()
+
+
+def analysisForNestedSystematicSampling(geodataframe_whole,variogram):
+    
+    samples = map(lambda i : systSelection(geodataframe_whole,i), range(20,2,-1))
+    logger.info("Initializing systematic sampling")
+    lparams = []
+    lpvals = []
+    lrsq = []
+    lconf_int = []
+    ln_obs = []
+    for sample in samples:
+        n_obs, rsq,params,pvals,conf_int = bundleToGLS(sample,variogram.model)
+        logger.info("RESULTS::: n_obs: %s, r-squared: %s, {%s,%s,%s}"%(n_obs,rsq,params.to_json(),pvals.to_json(),pvals.to_json()))
+        ln_obs.append(n_obs)
+        lrsq.append(rsq)
+        lparams.append(params)
+        lpvals.append(pvals)
+        lconf_int.append(conf_int)
+    return ln_obs,lrsq,lparams,lpvals,lconf_int
+    
 ########## Experimental
 def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     """
