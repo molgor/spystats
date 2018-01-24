@@ -19,3 +19,12 @@
 2018-01-19 15:09:15,648 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Instantiating Matern Model...
 2018-01-19 15:09:15,648 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - fitting Whittle Model with the empirical variogram
 2018-01-19 15:09:15,737 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Model fitted
+2018-01-19 17:12:23,839 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Reprojecting to Alberts equal area
+2018-01-19 17:12:33,989 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-01-19 17:12:34,120 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Reading the empirical Variogram file
+2018-01-19 17:12:34,121 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Instantiating a Variogram object with the values calculated before
+2018-01-19 17:12:34,123 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Dropping possible Nans
+2018-01-19 17:12:34,127 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Instantiating Matern Model...
+2018-01-19 17:12:34,127 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - fitting Whittle Model with the empirical variogram
+2018-01-19 17:12:34,137 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Model fitted

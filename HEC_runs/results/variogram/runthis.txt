@@ -1,0 +1,1 @@
+python /home/hpc/28/escamill/spystats/HEC_runs/variogram_fia.py /home/hpc/28/escamill/csv_data/idiv/FIA_Plots_Biomass_11092017.csv -130 -60 25 50 1000000
