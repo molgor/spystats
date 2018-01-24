@@ -88,13 +88,13 @@ def fitLinearLogLogModel(geodataframe):
     model = smf.ols(formula='logBiomass ~ logSppN',data=geodataframe)
     results = model.fit()
     param_model = results.params
-    summary = results.summary()
-    return (model,summary)
+    #summary = results.summary()
+    return (model,results)
 
 
 def createVariogram(plotdata_path,geodataframe):
     """
-    Another tupid function for chunking the tasks
+    Another  function for chunking the tasks
     """    
 
     ## Read the empirical variogram

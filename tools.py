@@ -440,7 +440,10 @@ def gaussianVariogram(h,sill=0,range_a=0,nugget=0):
         
     """
     if isinstance(h,np.ndarray):
-        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        #Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        Ih = np.copy(h)
+        Ih[Ih >= 0.0 ] = 1.0
+        Ih[Ih < 0.0] = 0.0
     else:
         Ih = 1.0 if h >= 0 else 0.0
     #Ih = 1.0 if h >= 0 else 0.0    
@@ -462,7 +465,10 @@ def exponentialVariogram(h,sill=0,range_a=0,nugget=0):
     """
     
     if isinstance(h,np.ndarray):
-        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        #Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        Ih = np.copy(h)
+        Ih[Ih >= 0.0 ] = 1.0
+        Ih[Ih < 0.0] = 0.0
     else:
         Ih = 1.0 if h >= 0 else 0.0
     g_h = (sill - nugget)*(1 - np.exp(-h/range_a)) + (nugget*Ih)
@@ -483,7 +489,10 @@ def sphericalVariogram(h,sill=0,range_a=0,nugget=0):
     """
     
     if isinstance(h,np.ndarray):
-        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        #Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        Ih = np.copy(h)
+        Ih[Ih >= 0.0 ] = 1.0
+        Ih[Ih < 0.0] = 0.0
         I0r = np.array([1.0 if hi <= range_a else 0.0 for hi in h])
         Irinf = [1.0 if hi > range_a else 0.0 for hi in h]
     else:
@@ -542,18 +551,21 @@ def whittleVariogram(h,sill=0,range_a=0,nugget=0,alpha=1):
         
     """
     if isinstance(h,np.ndarray):
-        Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        #Ih = np.array([1.0 if hx >= 0.0 else 0.0 for hx in h])
+        Ih = np.copy(h)
+        Ih[Ih >= 0.0 ] = 1.0
+        Ih[Ih < 0.0] = 0.0
     else:
         Ih = 1.0 if h >= 0 else 0.0
     #Ih = 1.0 if h >= 0 else 0.0    
     g_h = ((sill - nugget)*(1 - np.exp(-(h**alpha / range_a**alpha)))) + nugget*Ih
     return g_h
 
-def theoreticalVariogram(model_function,sill,range_a,nugget,kappa=0):
-    if kappa == 0:
+def theoreticalVariogram(model_function,sill,range_a,nugget,alpha=0):
+    if alpha == 0:
         return lambda x : model_function(x,sill,range_a,nugget)
     else: 
-        return lambda x : model_function(x,sill,range_a,nugget,kappa)
+        return lambda x : model_function(x,sill,range_a,nugget,alpha)
 
 class VariogramModel(object):
     """
@@ -586,12 +598,31 @@ class VariogramModel(object):
         ## See: Diggle & Ribeiro (2006) section 3.5
         #corr_cont = lambda hx :  1 - (self.sill * self.f(hx) / (self.sill + self.nugget))
         ## Corrections made and suggested by Erick Chacon
+        variogram_evaluated = self.f(h)
+        corr_cont = (self.sill - variogram_evaluated) / (self.sill - self.nugget)
+        #corr_cont = lambda hx : (self.sill - self.f(hx)) / (self.sill - self.nugget)
+        #return np.array([1.0 if hx == 0 else corr_cont(hx) for hx in h])
+        #corr_cont[corr_cont == 0 ] = 1.0            
+        return corr_cont
+
+
+
+    def corr_f_old(self,h):
+        """
+        Calculates the correlation function based on the given theoretical "intrinsic valid model"
+        note:
+            Deprecated : Use corr_f
+        """
+        ## correlation function for distances bigger than zero
+        ## See: Diggle & Ribeiro (2006) section 3.5
+        #corr_cont = lambda hx :  1 - (self.sill * self.f(hx) / (self.sill + self.nugget))
+        ## Corrections made and suggested by Erick Chacon
+        #variogram_evaluated = self.f(h)
+        #corr_cont = (self.sill - variogram_evaluated) / (self.sill - self.nugget)
         corr_cont = lambda hx : (self.sill - self.f(hx)) / (self.sill - self.nugget)
         return np.array([1.0 if hx == 0 else corr_cont(hx) for hx in h])
-            
-            
-        #return lambda h :  1 - (self.f(h))
-        #return lambda h :  1 - (self.sill * self.f(h) / (self.sill + self.nugget))
+
+
 
 
     def calculateCovarianceMatrixWith(self,Mdist):
@@ -626,30 +657,32 @@ class VariogramModel(object):
         from scipy.optimize import curve_fit
         if not init_params:
             init_params = [self.sill,self.range_a,self.nugget]
-            if hasattr(self, 'kappa'):
-                init_params.append(self.kappa)
-            
-                
+            if hasattr(self, 'alpha'):
+                init_params.append(self.alpha)
+                      
         try:
             best_params, covar_model = curve_fit(self.model, xdata=lags, ydata=variogram, p0=init_params)
         except TypeError:
             logger.error("This model  does not support more than 3 parameters")
-            return None
-        #teovarmodel = theoreticalVariogram(model,*best_params)
+            raise
+            #return None
         try:
             s,r,n = best_params
-            k = 0
+            self.sill = s
+            self.range_a = r
+            self.nugget = n
         except:
-            s,r,n,k = best_params
-            
-        self.sill = s
-        self.range_a = r
-        self.nugget = n
-        self.kappa = k
+            try:
+                s,r,n,a = best_params
+                self.sill = s
+                self.range_a = r
+                self.nugget = n
+                self.alpha = a
+            except:
+                raise
         
         logger.info("Adding model to the attributes space")
-        #setattr(self,'model',model)
-        #setattr(self,'model_params',best_params)
+
         setattr(self,'model_covar',covar_model)
     
         return {'parameters':best_params,'covar_model':covar_model}
@@ -689,13 +722,13 @@ class WhittleVariogram(VariogramModel):
         super(WhittleVariogram, self).__init__(sill,range_a,nugget)
         self.model = whittleVariogram
         self.name = 'whittle'
-        self.kappa = alpha
+        self.alpha = alpha
     def __repr__(self):
-        return u"< Whittle Variogram : sill %s, range %s, nugget %s, alpha%s >"%(self.sill,self.range_a,self.nugget,self.kappa)
+        return u"< Whittle Variogram : sill %s, range %s, nugget %s, alpha%s >"%(self.sill,self.range_a,self.nugget,self.alpha)
 
     @property
     def f(self):
-        return lambda x : self.model(x,self.sill,self.range_a,self.nugget,self.kappa)
+        return lambda x : self.model(x,self.sill,self.range_a,self.nugget,self.alpha)
 
 
 
@@ -715,7 +748,7 @@ class MaternVariogram(VariogramModel):
     """
     Subclass for a Matern Variogram
     """   
-    def __init__(self,sill=0,range_a=0,nugget=0,kappa=0):
+    def __init__(self,sill=0,range_a=0,nugget=0,kappa=0.5):
         super(MaternVariogram, self).__init__(sill,range_a,nugget)
         self.kappa = kappa
         self.model = maternVariogram
