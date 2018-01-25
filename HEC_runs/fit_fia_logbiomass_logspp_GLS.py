@@ -81,7 +81,6 @@ def prepareDataFrame(empirical_data_path):
 def fitLinearLogLogModel(geodataframe):
     """
     This is a stupid hardcoded function.
-    It's use is only forensic
     """
     #linear model
     logger.info("Fitting OLS linear model: logBiomass ~ logSppN ")
@@ -126,7 +125,7 @@ def loadVariogramFromData(plotdata_path,geodataframe):
 
 def buildSpatialStructure(geodataframe,theoretical_model):
     """
-    Stupid wrapper function for calculating spatial covariance matrix
+    wrapper function for calculating spatial covariance matrix
     """
     secvg = tools.Variogram(geodataframe,'logBiomass',model=theoretical_model)
     logger.info("Calculating Distance Matrix")
@@ -159,7 +158,7 @@ def analysisForNestedSystematicSampling(geodataframe_whole,variogram):
     ln_obs = []
     for sample in samples:
         n_obs, rsq,params,pvals,conf_int = bundleToGLS(sample,variogram.model)
-        logger.info("RESULTS::: n_obs: %s, r-squared: %s, {%s,%s,%s}"%(n_obs,rsq,params.to_json(),pvals.to_json(),pvals.to_json()))
+        logger.info("RESULTS::: n_obs: %s, r-squared: %s, {%s,%s,%s}"%(n_obs,rsq,params.to_json(),pvals.to_json(),conf_int.to_json()))
         ln_obs.append(n_obs)
         lrsq.append(rsq)
         lparams.append(params)
@@ -194,13 +193,26 @@ def fitGLSRobust(geodataframe,variogram_object,num_iterations=20,distance_thresh
     
     note: the geodataframe needs to have a column called `residuals` 
     """
-    summaries = []
+    lrsq = []
+    lparams = []
+    lpvals = []
+    lconf_int = []
     for i in range(num_iterations):    
         logger.info("Building Spatial Covariance Matrix")
         CovMat = buildSpatialStructure(geodataframe,variogram_object.model)
         logger.info("Calculating GLS estimators")
         results,resum = calculateGLS(geodataframe,CovMat)
-        summaries.append(resum)
+        
+        n_obs = results.nobs
+        rsq = results.rsquared
+        params = results.params
+        pvals = results.pvalues 
+        conf_int = results.conf_int()
+        logger.info("RESULTS::: n_obs: %s, r-squared: %s, {%s,%s,%s}"%(n_obs,rsq,params.to_json(),pvals.to_json(),conf_int.to_json()))
+        lrsq.append(rsq)
+        lparams.append(params)
+        lpvals.append(pvals)
+        lconf_int.append(conf_int)
         geodataframe.residuals = results.resid
         envelope = variogram_object.envelope
         variogram_object = tools.Variogram(geodataframe,'residuals',using_distance_threshold=distance_threshold,model=variogram_object.model)
