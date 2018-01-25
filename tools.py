@@ -258,7 +258,7 @@ class Variogram(object):
         return envelopedf
     
     
-    def plot(self,with_envelope=True,percentage_trunked=10,refresh=True,n_bins=50,plot_filename=False,**kwargs):
+    def plot(self,with_envelope=False,percentage_trunked=10,refresh=True,n_bins=50,plot_filename=False,**kwargs):
         """
         Plot the empirical semivariogram with optional confidence interval using MonteCarlo permutations at 0.025 and 0.975 quantiles.
         Returns a matplotlib object.
@@ -273,11 +273,14 @@ class Variogram(object):
         """
         
         
-        #v = env.iloc[1:30,:]
-        #points = plt.scatter(vg.lags,vg.empirical)
+
         if (self.empirical.empty or refresh == True):
             logger.info("Calculating empirical variogram")
             self.calculateEmpirical(n_bins=n_bins)
+            try :
+                self.envelope.variogram = self.empirical
+            except:
+                logger.info("Envelope attribute not found. Storing variogram in empirical attribute")
         
         nrows = self.empirical.shape[0]
         indx = int(np.ceil(float(percentage_trunked)/100 * nrows))
@@ -294,16 +297,11 @@ class Variogram(object):
                     self.calculateEnvelope(num_iterations=num_iter,n_bins=n_bins)
                 else:
                     self.calculateEnvelope()
-                #except:
-                #    self.calculateEnvelope()
             else:
                 logger.info("Using previously stored envelope. Use refresh option to recalculate.")   
             
             envelope = self.envelope.iloc[:(nrows - indx)]
             
-            ## ********* PLOT    
-            #plt.plot(lags,empirical,'o--',lw=2.0)
-            ### ***** PLOT
             plt.plot(lags,envelope.envhigh,'k--')
             plt.plot(lags,envelope.envlow,'k--')
             plt.fill_between(lags,envelope.envlow,envelope.envhigh,alpha=0.5)

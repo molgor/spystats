@@ -92,14 +92,14 @@ def fitLinearLogLogModel(geodataframe):
     return (model,results)
 
 
-def createVariogram(plotdata_path,geodataframe):
+def loadVariogramFromData(plotdata_path,geodataframe):
     """
-    Another  function for chunking the tasks
+    Reads and instantiates a Variogram object using data stored in plotdata_path.
     """    
 
     ## Read the empirical variogram
     logger.info("Reading the empirical Variogram file")
-    thrs_dist = 100000
+    thrs_dist = 1000000
     
     ## Change here with appropriate path for file
     empirical_semivariance_log_log = plotdata_path
@@ -113,17 +113,11 @@ def createVariogram(plotdata_path,geodataframe):
     logger.info("Dropping possible Nans")
     emp_var_log_log = emp_var_log_log.dropna()
     vdata = gvg.envelope.dropna()
-    
-    #logger.info("Instantiating Whittle Model...")
-    #whittle_model = tools.WhittleVariogram(sill=0.345,range_a=100000,nugget=0.33,alpha=1.0)
-    #logger.info("fitting Whittle Model with the empirical variogram")
-    #tt = gvg.fitVariogramModel(whittle_model)
-    #logger.info("Whittle Model fitted")
 
-    logger.info("Instantiating Matern Model...")
+    logger.info("Instantiating Model...")
     #matern_model = tools.MaternVariogram(sill=0.34,range_a=100000,nugget=0.33,kappa=0.5)
     whittle_model = tools.WhittleVariogram(sill=0.34,range_a=100000,nugget=0.0,alpha=3)
-    logger.info("fitting Whittle Model with the empirical variogram")
+    logger.info("fitting %s Model with the empirical variogram"%whittle_model.name)
     gvg.model = whittle_model
     tt = gvg.fitVariogramModel(whittle_model)
     logger.info("Model fitted")  
@@ -172,6 +166,25 @@ def analysisForNestedSystematicSampling(geodataframe_whole,variogram):
         lpvals.append(pvals)
         lconf_int.append(conf_int)
     return ln_obs,lrsq,lparams,lpvals,lconf_int
+
+
+
+
+
+def initAnalysis(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
+    """
+    Initialises the data.
+    Prepares it,
+    Append residuals column using OLS.
+    """
+    ## make subsection
+    new_data = prepareDataFrame(empirical_data_path)
+    model, results = fitLinearLogLogModel(new_data)
+    new_data['residuals'] = results.resid
+    section = tools._subselectDataFrameByCoordinates(new_data,'LON','LAT',minx,maxx,miny,maxy)
+    return section
+    
+    
     
 ########## Experimental
 def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
@@ -179,19 +192,9 @@ def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     The main batch processing
     """
     
-    minx = minx
-    maxx = maxx
-    miny = miny
-    maxy = maxy
     
-    new_data = prepareDataFrame(empirical_data_path)
-    
-    
-    model, results = fitLinearLogLogModel(new_data)
-    new_data['residuals'] = results.resid
-    
-    
-    gvg,tt = createVariogram(plotdata_path,new_data)
+    new_data = initAnalysis(empirical_data_path,plotdata_path,minx,maxx,miny,maxy)
+    gvg,tt = loadVariogramFromData(plotdata_path,new_data)
     
     
     logger.info("Subselecting Region")
