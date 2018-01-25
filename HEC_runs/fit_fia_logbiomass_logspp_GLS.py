@@ -181,10 +181,36 @@ def initAnalysis(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     new_data = prepareDataFrame(empirical_data_path)
     model, results = fitLinearLogLogModel(new_data)
     new_data['residuals'] = results.resid
+    logger.info("Subselecting Region")
     section = tools._subselectDataFrameByCoordinates(new_data,'LON','LAT',minx,maxx,miny,maxy)
     return section
     
+def fitGLSRobust(geodataframe,variogram_object,num_iterations=20,distance_threshold=1000000):
+    """
+    Fits a GLS model iterating through the residuals of the previous GLS.
+    After estimating the parameters the method uses the new residuals as input.
+    Recalculates the empirical variogram, refits the theoretical variogram, recalculates de Covariance Matrix.
+    This is done `num_iterations` times.
     
+    note: the geodataframe needs to have a column called `residuals` 
+    """
+    summaries = []
+    for i in range(num_iterations):    
+        logger.info("Building Spatial Covariance Matrix")
+        CovMat = buildSpatialStructure(geodataframe,variogram_object.model)
+        logger.info("Calculating GLS estimators")
+        results,resum = calculateGLS(geodataframe,CovMat)
+        summaries.append(resum)
+        geodataframe.residuals = results.resid
+        envelope = variogram_object.envelope
+        variogram_object = tools.Variogram(geodataframe,'residuals',using_distance_threshold=distance_threshold,model=variogram_object.model)
+        variogram_object.envelope = envelope
+        #variogram_object.empirical = empirical
+        logger.info("Recalculating variogram")
+        variogram_object.calculateEmpirical()
+        logger.info("Refiting Theoretical Variogram")
+        tt = variogram_object.fitVariogramModel(variogram_object.model)
+    return (resum,variogram_object)
     
 ########## Experimental
 def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
@@ -196,25 +222,23 @@ def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     new_data = initAnalysis(empirical_data_path,plotdata_path,minx,maxx,miny,maxy)
     gvg,tt = loadVariogramFromData(plotdata_path,new_data)
     
+    resum,gvgn = fitGLSRobust(new_data,gvg,num_iterations=1,distance_threshold=1000000)
     
-    logger.info("Subselecting Region")
     
-    ## make subsection
-    section = tools._subselectDataFrameByCoordinates(new_data,'LON','LAT',minx,maxx,miny,maxy)
     
 
-    CovMat = buildSpatialStructure(section,gvg.model)
-    results,resum = calculateGLS(section,CovMat)
+    #CovMat = buildSpatialStructure(new_data,gvg.model)
+    #results,resum = calculateGLS(new_data,CovMat)
 
     
     logger.info("Writing to file")
-    f = open("test_gls.csv",'w')
+    f = open("gls1.txt",'w')
     f.write(resum.as_text())
     f.close()    
     
-    logger.info("Finished! Results in: tests1.csv")
+    logger.info("Finished! Results in: gls1.txt")
     
-    return {'dataframe':new_data,'variogram':gvg,'modelGLS':results}
+    return {'dataframe':new_data,'variogram':gvgn,'modelGLS':resum}
     
 if __name__ == "__main__":
     empirical_data_path = sys.argv[1]

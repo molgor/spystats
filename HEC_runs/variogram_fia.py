@@ -92,7 +92,7 @@ def main(csv_path,minx,maxx,miny,maxy,predicted_size=300,distance_threshold=5000
     vg = Variogram(section,'residuals1',using_distance_threshold=distance_threshold)
     
     #vg.calculate_empirical(n_bins=50)
-    vgplot = vg.plot(num_iterations=40,n_bins=50,plot_filename='test1.png')
+    vgplot = vg.plot(num_iterations=40,with_envelope=True,n_bins=50,plot_filename='test1.png')
     logger.info("Copying to output file")
     vg.envelope.to_csv("data_envelope.csv")
     logger.info("Finished! Results in: tests1.csv")
