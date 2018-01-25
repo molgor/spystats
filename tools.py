@@ -649,7 +649,8 @@ class VariogramModel(object):
             
         """
         logger.info("Removing possible NA's")
-        envelope = emp_variogram.envelope.dropna()
+        envelope = pd.DataFrame({'variogram':emp_variogram.empirical,'lags':emp_variogram.lags})
+        envelope = envelope.dropna()
         variogram = envelope.variogram.values
         lags = envelope.lags.values
         from scipy.optimize import curve_fit
