@@ -222,8 +222,7 @@ class Variogram(object):
     def distance_responses(self):
         return _getDistResponseVariable(self.data,self.selected_response_variable)
 
-    
-        
+     
     def calculateEmpirical(self,n_bins=50):
         """
         Returns the empirical variogram given by the formula:
@@ -256,7 +255,6 @@ class Variogram(object):
         envelopedf = pd.concat([envelopedf,self.empirical],axis=1)
         self.envelope = envelopedf
         return envelopedf
-    
     
     def plot(self,with_envelope=False,percentage_trunked=10,refresh=True,n_bins=50,plot_filename=False,**kwargs):
         """
@@ -354,9 +352,6 @@ class Variogram(object):
         self.model = model_instance
         return self.model
         
-        
-              
-
     def fitTheoreticalVariogramModel(self,model,parameter_set):
         """
         Fits a valid model (tools.model) to the empirical variogram object as base.
@@ -367,6 +362,9 @@ class Variogram(object):
     
         Returns:
             A function with the optimized parameters.
+            
+        notes::
+            Deprecated. Use: fitVariogramModel
         """
         
         logger.warn("Deprecated. Use: fitVariogramModel")
@@ -388,7 +386,6 @@ class Variogram(object):
     
         return (teovarmodel,{'parameters':best_params,'covar_model':covar_model})
 
-
     def calculateCovarianceMatrix(self):
         """
         Returns an evaluation of the Covariance matrix, given the model stored as attribute.
@@ -396,6 +393,7 @@ class Variogram(object):
         MMdist = self.distance_coordinates
         Sigma = self.model.calculateCovarianceMatrixWith(MMdist)
         return Sigma
+
 
 
 
@@ -422,8 +420,32 @@ def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_num
     chunks_non_empty = filter(lambda df : df.shape[0] > threshold ,chunks)
     return chunks_non_empty
         
-## Theoretical variograms models.
 
+
+
+def simulateGaussianRandomField(variogram_model,grid_size):
+    """
+    Returns a Random simulation of the derived Multivariate Normal Distribution with $\mu$ response variable and $Sigma$ = Resulting Covariate Matrix from model.
+    The grid size is the length side of the grid to simulate.
+    """
+    n = grid_size
+    nx = np.linspace(0,1,n)
+    xx, yy = np.meshgrid(nx,nx)
+    points = pd.DataFrame({'Lon': xx.ravel(),'Lat':yy.ravel()})
+    points = toGeoDataFrame(points,'Lon','Lat')
+    Y = np.zeros(n*n)
+    points['Y'] = Y
+    vg = Variogram(points,'Y',model=variogram_model)
+    logger.info("Calculating Sigma (CovMat)")
+    Sigma = vg.calculateCovarianceMatrix()
+    from scipy.stats import multivariate_normal as mvn
+    sim1 = mvn.rvs(mean=Y,cov=Sigma)   
+    return sim1.reshape(n,n)
+
+
+
+
+### Theoretical Models
 def gaussianVariogram(h,sill=0,range_a=0,nugget=0):
     """
     The Gaussian Variogram, positive SEMI definite, and it's not recommended to use.
@@ -687,10 +709,7 @@ class VariogramModel(object):
         return {'parameters':best_params,'covar_model':covar_model}
 
         
-
-
-
-
+## Instances of Variogram        
 class ExponentialVariogram(VariogramModel):
     """
     Subclass for exponential Variogram

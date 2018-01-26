@@ -234,7 +234,7 @@ def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     new_data = initAnalysis(empirical_data_path,plotdata_path,minx,maxx,miny,maxy)
     gvg,tt = loadVariogramFromData(plotdata_path,new_data)
     
-    resum,gvgn = fitGLSRobust(new_data,gvg,num_iterations=1,distance_threshold=1000000)
+    resum,gvgn = fitGLSRobust(new_data,gvg,num_iterations=50,distance_threshold=1000000)
     
     
     
