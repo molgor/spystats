@@ -421,25 +421,44 @@ def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_num
     return chunks_non_empty
         
 
-
-
-def simulateGaussianRandomField(variogram_model,grid_size):
+def createSquareGrid(minx=0.0, maxx = 1.0,grid_size=50):
     """
-    Returns a Random simulation of the derived Multivariate Normal Distribution with $\mu$ response variable and $Sigma$ = Resulting Covariate Matrix from model.
-    The grid size is the length side of the grid to simulate.
+    Create a Square Grid with custom coordinates an size.
+    Parameters :
+        minx : (Float) where to start point 0
+        maxx :(FLoat) where to finish grid 
+        grid_size : (Int) number of points per side.
     """
     n = grid_size
-    nx = np.linspace(0,1,n)
+    nx = np.linspace(minx,maxx,n)
     xx, yy = np.meshgrid(nx,nx)
     points = pd.DataFrame({'Lon': xx.ravel(),'Lat':yy.ravel()})
     points = toGeoDataFrame(points,'Lon','Lat')
-    Y = np.zeros(n*n)
-    points['Y'] = Y
-    vg = Variogram(points,'Y',model=variogram_model)
+    return points
+
+
+
+def simulateGaussianRandomField(variogram_model,grid,random_seed=False):
+    """
+    Returns a Random simulation of the derived Multivariate Normal Distribution with $\mu$ response variable and $Sigma$ = Resulting Covariate Matrix from model.
+    Parameters : 
+        variogram Model (Variogram) : an instance from variogram
+        grid (Dataframe) : a geodata frame with coordinates.
+        random_seed : (Integer) a random seed to reproduce results.
+        note: to create the variogram see: createSquareGrid
+        
+    """
+    n_sq = len(grid)
+    Y = np.zeros(n_sq)
+    grid['Y'] = Y
+    vg = Variogram(grid,'Y',model=variogram_model)
     logger.info("Calculating Sigma (CovMat)")
     Sigma = vg.calculateCovarianceMatrix()
     from scipy.stats import multivariate_normal as mvn
+    if random_seed:
+        np.random.seed(random_seed)
     sim1 = mvn.rvs(mean=Y,cov=Sigma)   
+    n = int(np.sqrt(n_sq))
     return sim1.reshape(n,n)
 
 
