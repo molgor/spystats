@@ -421,7 +421,7 @@ def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_num
     return chunks_non_empty
         
 
-def createSquareGrid(minx=0.0, maxx = 1.0,grid_size=50):
+def createGrid(minx=0.0, maxx = 1.0,miny=0.0,maxy=1.0,grid_sizex=50,grid_sizey=50):
     """
     Create a Square Grid with custom coordinates an size.
     Parameters :
@@ -429,22 +429,26 @@ def createSquareGrid(minx=0.0, maxx = 1.0,grid_size=50):
         maxx :(FLoat) where to finish grid 
         grid_size : (Int) number of points per side.
     """
-    n = grid_size
-    nx = np.linspace(minx,maxx,n)
-    xx, yy = np.meshgrid(nx,nx)
+    nx = np.linspace(minx,maxx,grid_sizex)
+    ny = np.linspace(miny,maxy,grid_sizey)
+    xx, yy = np.meshgrid(nx,ny)
     points = pd.DataFrame({'Lon': xx.ravel(),'Lat':yy.ravel()})
     points = toGeoDataFrame(points,'Lon','Lat')
     return points
 
 
 
-def simulateGaussianRandomField(variogram_model,grid,random_seed=False):
+def simulateGaussianRandomField(variogram_model,grid,random_seed=False,return_matrix=True):
     """
     Returns a Random simulation of the derived Multivariate Normal Distribution with $\mu$ response variable and $Sigma$ = Resulting Covariate Matrix from model.
     Parameters : 
         variogram Model (Variogram) : an instance from variogram
         grid (Dataframe) : a geodata frame with coordinates.
         random_seed : (Integer) a random seed to reproduce results.
+        
+        return_matrix : (Bool) if true it will return a square matrix.
+            note: For this case the grid must be SQUARE. 
+        
         note: to create the variogram see: createSquareGrid
         
     """
@@ -458,8 +462,12 @@ def simulateGaussianRandomField(variogram_model,grid,random_seed=False):
     if random_seed:
         np.random.seed(random_seed)
     sim1 = mvn.rvs(mean=Y,cov=Sigma)   
-    n = int(np.sqrt(n_sq))
-    return sim1.reshape(n,n)
+    if return_matrix:
+        n = int(np.sqrt(n_sq))
+        return sim1.reshape(n,n)
+    else:
+        s = pd.DataFrame({'sim':sim1})
+        return s
 
 
 
