@@ -222,7 +222,10 @@ def fitGLSRobust(geodataframe,variogram_object,num_iterations=20,distance_thresh
         variogram_object.calculateEmpirical()
         logger.info("Refiting Theoretical Variogram")
         tt = variogram_object.fitVariogramModel(variogram_object.model)
-    return (resum,variogram_object)
+        logger.info("Variogram parameters: range %s, sill %s, nugget %s"%(tt.range_a,tt.sill,tt.nugget))
+   
+    results = pd.DataFrame( {'rsq' : lrsq, 'params': lparams, 'pvals' : lpvals, 'conf_int' : lconf_int})
+    return (resum,variogram_object,results)
     
 ########## Experimental
 def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
@@ -234,7 +237,7 @@ def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     new_data = initAnalysis(empirical_data_path,plotdata_path,minx,maxx,miny,maxy)
     gvg,tt = loadVariogramFromData(plotdata_path,new_data)
     
-    resum,gvgn = fitGLSRobust(new_data,gvg,num_iterations=50,distance_threshold=1000000)
+    resum,gvgn,results = fitGLSRobust(new_data,gvg,num_iterations=50,distance_threshold=1000000)
     
     
     
@@ -250,7 +253,7 @@ def main(empirical_data_path,plotdata_path,minx,maxx,miny,maxy):
     
     logger.info("Finished! Results in: gls1.txt")
     
-    return {'dataframe':new_data,'variogram':gvgn,'modelGLS':resum}
+    return {'dataframe':new_data,'variogram':gvgn,'modelGLS':resum,'results':results}
     
 if __name__ == "__main__":
     empirical_data_path = sys.argv[1]
