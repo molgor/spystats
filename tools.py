@@ -469,8 +469,21 @@ def simulateGaussianRandomField(variogram_model,grid,random_seed=False,return_ma
         s = pd.DataFrame({'sim':sim1})
         return s
 
-
-
+def simulatedGaussianFieldAsPcolorMesh(variogram_model,minx=0.0, maxx = 1.0,miny=0.0,maxy=1.0,grid_sizex=50,grid_sizey=50,random_seed=False):
+    """
+    A wrapper that creates a grid and performs a simulated Gaussian process
+    It returns a triplet to plot directly using matplotlib.pcolor or pcolormesh.
+    
+    note: It uses the functions: `createGrid` and `simulateGaussianRandomField`
+    """
+    grid1 = createGrid(minx, maxx, miny, maxy, grid_sizex, grid_sizey)
+    sim = simulateGaussianRandomField(variogram_model,grid1,random_seed=random_seed,return_matrix=False)
+    del(grid1)
+    nx = np.linspace(minx,maxx,grid_sizex)
+    ny = np.linspace(miny,maxy,grid_sizey)
+    xx, yy = np.meshgrid(nx,ny)
+    sim = sim.sim.values.reshape(grid_sizey,grid_sizex)
+    return (xx,yy,sim)
 
 ### Theoretical Models
 def gaussianVariogram(h,sill=0,range_a=0,nugget=0):
