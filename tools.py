@@ -601,7 +601,11 @@ def maternVariogram(h,sill=1,range_a=100,nugget=40,kappa=0.5):
 def whittleVariogram(h,sill=0,range_a=0,nugget=0,alpha=1):
     """
     The Whittle Variogram, an alternative to the Gaussian Model.
-    $$\gamma (h)=(s-n)\left(1-\exp \left(-{\frac  {h^{\alpha}}{r^{\alpha}a}}\right)\right)+n1_{{(0,\infty )}}(h)$$
+    $$\gamma (h)=(s-n)\left(1-\exp \left(-{\frac  {h^{\alpha}}{r^{\alpha}}}\right)\right)+n1_{{(0,\infty )}}(h)$$
+
+    $$\gamma (h)=\sigma^2\left(1-\exp \left(-{\frac  {h^{\alpha}}{r^{\alpha}}}\right)\right)+n1_{{(0,\infty )}}(h)$$
+    
+
     
     Parameters:
         h : (Float or Numpy Array) Distances to evaluate
