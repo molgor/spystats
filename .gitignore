@@ -1,2 +1,3 @@
 *.pyc
 notebooks/demo/.ipynb_checkpoints/
+.pytest_cache/
