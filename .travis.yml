@@ -4,7 +4,7 @@ python:
  - "3.4"
 before_install:
  - sudo apt-get update -q
- - sudo apt-get install proj4
+ - sudo apt-get install libproj-dev
 
 install:
  - pip install -r requirements.yml
