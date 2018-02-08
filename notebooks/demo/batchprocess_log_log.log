@@ -1,0 +1,5 @@
+2018-02-08 15:42:17,970 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Reprojecting to Alberts equal area
+2018-02-08 15:42:27,553 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-02-08 15:42:27,645 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-02-08 15:42:27,726 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Subselecting Region
