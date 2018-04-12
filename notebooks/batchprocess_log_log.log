@@ -198,3 +198,14 @@
 2018-03-06 00:22:13,443 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Instantiating Model...
 2018-03-06 00:22:13,446 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - fitting whittle Model with the empirical variogram
 2018-03-06 00:22:13,487 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Model fitted
+2018-04-11 17:04:25,060 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Reprojecting to Alberts equal area
+2018-04-11 17:04:31,030 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-04-11 17:04:31,098 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-04-11 17:04:31,184 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Subselecting Region
+2018-04-11 17:04:37,253 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Reading the empirical Variogram file
+2018-04-11 17:04:37,255 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Instantiating a Variogram object with the values calculated before
+2018-04-11 17:04:37,277 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Dropping possible Nans
+2018-04-11 17:04:37,281 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Instantiating Model...
+2018-04-11 17:04:37,281 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - fitting whittle Model with the empirical variogram
+2018-04-11 17:04:37,285 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Model fitted

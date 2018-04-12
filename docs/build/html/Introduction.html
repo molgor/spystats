@@ -1,0 +1,439 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction &#8212; Spystats 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Spystats’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p><cite>Spystats</cite> is a software for performing model-based Geostatistics</p>
+<p>Look our modules</p>
+<span class="target" id="module-spystats.tools"></span><dl class="class">
+<dt id="spystats.tools.ExponentialVariogram">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">ExponentialVariogram</code><span class="sig-paren">(</span><em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#ExponentialVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.ExponentialVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for exponential Variogram</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spystats.tools.GaussianVariogram">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">GaussianVariogram</code><span class="sig-paren">(</span><em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#GaussianVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.GaussianVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Gaussian Variogram</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spystats.tools.MaternVariogram">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">MaternVariogram</code><span class="sig-paren">(</span><em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em>, <em>kappa=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#MaternVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.MaternVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for a Matern Variogram</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.PartitionDataSet">
+<code class="descclassname">spystats.tools.</code><code class="descname">PartitionDataSet</code><span class="sig-paren">(</span><em>geodataset</em>, <em>namecolumnx</em>, <em>namecolumny</em>, <em>n_chunks=10</em>, <em>minimmum_number_of_points=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#PartitionDataSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.PartitionDataSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divides the given geodataset into n*n number of chunks
+Parameters :</p>
+<blockquote>
+<div>geodataset (GeoDataset) with defined coordinates (geometric column)
+n_chunks : (int) desired number of chunks per dimension (resulting nxn chunks)
+minimmum_number_of_points : (int) the minimum number of points for accepting a chunk as valid.</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="spystats.tools.SphericalVariogram">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">SphericalVariogram</code><span class="sig-paren">(</span><em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#SphericalVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.SphericalVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Spherical Variogram</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spystats.tools.Variogram">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">Variogram</code><span class="sig-paren">(</span><em>geopandas_dataset</em>, <em>response_variable_name</em>, <em>model=u''</em>, <em>using_distance_threshold=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that defines Empirical Variogram objects.</p>
+<dl class="method">
+<dt id="spystats.tools.Variogram.calculateCovarianceMatrix">
+<code class="descname">calculateCovarianceMatrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram.calculateCovarianceMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram.calculateCovarianceMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an evaluation of the Covariance matrix, given the model stored as attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.Variogram.calculateEmpirical">
+<code class="descname">calculateEmpirical</code><span class="sig-paren">(</span><em>n_bins=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram.calculateEmpirical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram.calculateEmpirical" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Returns the empirical variogram given by the formula:
+$$ v_{lag_i} =</div></blockquote>
+<p>rac{sum_{i=1}^{N(lag_i)} (y_i - y_j)^2}{2} $$</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Parameters:</dt>
+<dd>n_bins : (Integer) number of bins (lag distances)</dd>
+</dl>
+<p>This only assigns the data to the corresponding attributes.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.Variogram.calculateEnvelope">
+<code class="descname">calculateEnvelope</code><span class="sig-paren">(</span><em>num_iterations=99</em>, <em>n_bins=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram.calculateEnvelope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram.calculateEnvelope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the Montecarlo variogram envelope.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.Variogram.fitTheoreticalVariogramModel">
+<code class="descname">fitTheoreticalVariogramModel</code><span class="sig-paren">(</span><em>model</em>, <em>parameter_set</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram.fitTheoreticalVariogramModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram.fitTheoreticalVariogramModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a valid model (tools.model) to the empirical variogram object as base.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd>model : a Valid model (function)
+parameter_set : a tuple containing the init guesses for the parameters to be fitted from the model</dd>
+<dt>Returns:</dt>
+<dd>A function with the optimized parameters.</dd>
+<dt>notes::</dt>
+<dd>Deprecated. Use: fitVariogramModel</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.Variogram.fitVariogramModel">
+<code class="descname">fitVariogramModel</code><span class="sig-paren">(</span><em>model_instance</em>, <em>parameter_set=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram.fitVariogramModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram.fitVariogramModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a valid model (tools.models) to the empirical variogram object as base.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd>model_class : the class of a valid model.
+parameter_set : a tuple containing the init guesses for the parameters to be fitted from the model</dd>
+<dt>Returns:</dt>
+<dd>A function with the optimized parameters.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.Variogram.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>with_envelope=False</em>, <em>percentage_trunked=10</em>, <em>refresh=True</em>, <em>n_bins=50</em>, <em>plot_filename=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.Variogram.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the empirical semivariogram with optional confidence interval using MonteCarlo permutations at 0.025 and 0.975 quantiles.
+Returns a matplotlib object.
+Parameters :</p>
+<blockquote>
+<div>with_envelope : (Boolean) if true it will calculate and plot the 0.025 and 0.975 quantiles of a montecarlo permutations of $Y$ using fixed locations.
+percentage_trunked = (float) Percentage of data removed in the plot. This is to ease the visualisation by cutting the last values</div></blockquote>
+<dl class="docutils">
+<dt>Extra parameters in the kwargs</dt>
+<dd><ul class="first last simple">
+<li>num_iterations : (Integer) see CalculateEnvelope</li>
+<li>n_bins : (Integer) see calculate_variogram</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spystats.tools.VariogramModel">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">VariogramModel</code><span class="sig-paren">(</span><em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#VariogramModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.VariogramModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class specifies several variogram models.</p>
+<dl class="method">
+<dt id="spystats.tools.VariogramModel.calculateCovarianceMatrixWith">
+<code class="descname">calculateCovarianceMatrixWith</code><span class="sig-paren">(</span><em>Mdist</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#VariogramModel.calculateCovarianceMatrixWith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.VariogramModel.calculateCovarianceMatrixWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an evaluation of the Covariance matrix, given a distance matrix.
+Parameters :  numpy Matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.VariogramModel.corr_f">
+<code class="descname">corr_f</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#VariogramModel.corr_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.VariogramModel.corr_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the correlation function based on the given theoretical “intrinsic valid model”</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.VariogramModel.corr_f_old">
+<code class="descname">corr_f_old</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#VariogramModel.corr_f_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.VariogramModel.corr_f_old" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the correlation function based on the given theoretical “intrinsic valid model”
+note:</p>
+<blockquote>
+<div>Deprecated : Use corr_f</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="spystats.tools.VariogramModel.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>emp_variogram</em>, <em>init_params=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#VariogramModel.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.VariogramModel.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a the model to an empirical variogram object as base.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd>emp_variogram : (Variogram instance)
+parameter_set : a tuple containing the init guesses for the parameters to be fitted from the model</dd>
+<dt>Returns:</dt>
+<dd>A function with the optimized parameters</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spystats.tools.WhittleVariogram">
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">WhittleVariogram</code><span class="sig-paren">(</span><em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em>, <em>alpha=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#WhittleVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.WhittleVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Gaussian Variogram</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.calculateEmpiricalVariogram">
+<code class="descclassname">spystats.tools.</code><code class="descname">calculateEmpiricalVariogram</code><span class="sig-paren">(</span><em>distances</em>, <em>response_variable</em>, <em>n_bins=50</em>, <em>distance_threshold=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#calculateEmpiricalVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.calculateEmpiricalVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Returns the empirical variogram given by the formula
+$$ v_{lag_i} =</div></blockquote>
+<dl class="docutils">
+<dt>rac{sum_{i=1}^{N(lag_i)} (y_i - y_j)^2}{2} $$    </dt>
+<dd>Parameters:
+n_bins : (Integer) number of bins (lag distances)</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.createGrid">
+<code class="descclassname">spystats.tools.</code><code class="descname">createGrid</code><span class="sig-paren">(</span><em>minx=0.0</em>, <em>maxx=1.0</em>, <em>miny=0.0</em>, <em>maxy=1.0</em>, <em>grid_sizex=50</em>, <em>grid_sizey=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#createGrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.createGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Square Grid with custom coordinates an size.
+Parameters :</p>
+<blockquote>
+<div>minx : (Float) where to start point 0
+maxx :(FLoat) where to finish grid 
+grid_size : (Int) number of points per side.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.exponentialVariogram">
+<code class="descclassname">spystats.tools.</code><code class="descname">exponentialVariogram</code><span class="sig-paren">(</span><em>h</em>, <em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#exponentialVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.exponentialVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential variogram model</p>
+<p>$$gamma (h)=(s-n)(1-exp(-h/(ra)))+n1_{{(0,infty )}}(h)$$</p>
+<blockquote>
+<div>Parameters:
+h : (Float or Numpy Array) Distances to evaluate
+sill : Float
+range_a : Float
+nugget : Float</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.gaussianVariogram">
+<code class="descclassname">spystats.tools.</code><code class="descname">gaussianVariogram</code><span class="sig-paren">(</span><em>h</em>, <em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#gaussianVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.gaussianVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>The Gaussian Variogram, positive SEMI definite, and it’s not recommended to use.</p>
+<p>$$gamma (h)=(s-n)left(1-exp left(-{</p>
+</div></blockquote>
+<p>rac  {h^{2}}{r^{2}a}}
+ight)
+ight)+n1_{{(0,infty )}}(h)$$</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Parameters:</dt>
+<dd>h : (Float or Numpy Array) Distances to evaluate
+sill : Float
+range_a : Float
+nugget : Float</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.maternVariogram">
+<code class="descclassname">spystats.tools.</code><code class="descname">maternVariogram</code><span class="sig-paren">(</span><em>h</em>, <em>sill=1</em>, <em>range_a=100</em>, <em>nugget=40</em>, <em>kappa=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#maternVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.maternVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>The Matern Variogram of order $kappa$.</p>
+<p>$$ gamma(h) = nugget + (sill (1 - (</p>
+</div></blockquote>
+<p>arc{1}{2^{kappa -1}} Gamma(kappa) (
+rac{h}{r})^{kappa} <a href="#id1"><span class="problematic" id="id2">K_</span></a>kappa Big(
+rac{h}{r}Big)$$</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Let:</dt>
+<dd><blockquote class="first">
+<div>a = $(2^{kappa -1} Gamma(kappa))^{-1}$</div></blockquote>
+<p class="last">b = $</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>rac{h}{phi}$</dt>
+<dd>K_v = Modified Bessel function of the second kind of real order v</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.montecarloEnvelope">
+<code class="descclassname">spystats.tools.</code><code class="descname">montecarloEnvelope</code><span class="sig-paren">(</span><em>distances</em>, <em>response_variable</em>, <em>num_iterations=99</em>, <em>n_bins=50</em>, <em>distance_threshold=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#montecarloEnvelope"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.montecarloEnvelope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate Monte Carlo envelope by shuffling the response variable and keeping the distances the same.
+After GeoR. (“Model-Based Geostatistics; Diggle and Ribeiro, 2007”)
+Parameters :</p>
+<blockquote>
+<div>distances (List) linearised format of a distance matrix
+response_variable (list) linearised format of a response distance matrix.</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.simulateGaussianRandomField">
+<code class="descclassname">spystats.tools.</code><code class="descname">simulateGaussianRandomField</code><span class="sig-paren">(</span><em>variogram_model</em>, <em>grid</em>, <em>random_seed=False</em>, <em>return_matrix=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#simulateGaussianRandomField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.simulateGaussianRandomField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Random simulation of the derived Multivariate Normal Distribution with $mu$ response variable and $Sigma$ = Resulting Covariate Matrix from model.
+Parameters :</p>
+<blockquote>
+<div><p>variogram Model (Variogram) : an instance from variogram
+grid (Dataframe) : a geodata frame with coordinates.
+random_seed : (Integer) a random seed to reproduce results.</p>
+<dl class="docutils">
+<dt>return_matrix <span class="classifier-delimiter">:</span> <span class="classifier">(Bool) if true it will return a square matrix.</span></dt>
+<dd>note: For this case the grid must be SQUARE.</dd>
+</dl>
+<p>note: to create the variogram see: createSquareGrid</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.simulatedGaussianFieldAsPcolorMesh">
+<code class="descclassname">spystats.tools.</code><code class="descname">simulatedGaussianFieldAsPcolorMesh</code><span class="sig-paren">(</span><em>variogram_model</em>, <em>minx=0.0</em>, <em>maxx=1.0</em>, <em>miny=0.0</em>, <em>maxy=1.0</em>, <em>grid_sizex=50</em>, <em>grid_sizey=50</em>, <em>random_seed=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#simulatedGaussianFieldAsPcolorMesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.simulatedGaussianFieldAsPcolorMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper that creates a grid and performs a simulated Gaussian process
+It returns a triplet to plot directly using matplotlib.pcolor or pcolormesh.</p>
+<p>note: It uses the functions: <cite>createGrid</cite> and <cite>simulateGaussianRandomField</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.sphericalVariogram">
+<code class="descclassname">spystats.tools.</code><code class="descname">sphericalVariogram</code><span class="sig-paren">(</span><em>h</em>, <em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#sphericalVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.sphericalVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>The spherical variogram</p>
+<p>$$gamma (h)=(s-n)left(left({</p>
+</div></blockquote>
+<p>rac  {3h}{2r}}-{
+rac  {h^{3}}{2r^{3}}}
+ight)1_{{(0,r)}}(h)+1_{{[r,infty )}}(h)
+ight)+n1_{{(0,infty )}}(h))$$</p>
+<blockquote>
+<div>Parameters:
+h : (Float or Numpy Array) Distances to evaluate
+sill : Float
+range_a : Float
+nugget : Float</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.toGeoDataFrame">
+<code class="descclassname">spystats.tools.</code><code class="descname">toGeoDataFrame</code><span class="sig-paren">(</span><em>pandas_dataframe</em>, <em>xcoord_name</em>, <em>ycoord_name</em>, <em>srs=u'epsg:4326'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#toGeoDataFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.toGeoDataFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Pandas objcet to GeoDataFrame
+Inputs:</p>
+<blockquote>
+<div><p>pandas_dataframe : the pandas object to spatialise
+xcoord_name : (String) the column name of the x coordinate.
+ycoord_name : (String) the column name of the y coordinate. 
+srs : (String) the source referencing system in EPSG code.</p>
+<blockquote>
+<div>e.g. epsg:4326 .</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="spystats.tools.whittleVariogram">
+<code class="descclassname">spystats.tools.</code><code class="descname">whittleVariogram</code><span class="sig-paren">(</span><em>h</em>, <em>sill=0</em>, <em>range_a=0</em>, <em>nugget=0</em>, <em>alpha=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#whittleVariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spystats.tools.whittleVariogram" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>The Whittle Variogram, an alternative to the Gaussian Model.
+$$gamma (h)=(s-n)left(1-exp left(-{</div></blockquote>
+<p>rac  {h^{lpha}}{r^{lpha}}}
+ight)
+ight)+n1_{{(0,infty )}}(h)$$</p>
+<blockquote>
+<div>$$gamma (h)=sigma^2left(1-exp left(-{</div></blockquote>
+<p>rac  {h^{lpha}}{r^{lpha}}}
+ight)
+ight)+n1_{{(0,infty )}}(h)$$</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Parameters:</dt>
+<dd>h : (Float or Numpy Array) Distances to evaluate
+sill : Float
+range_a : Float
+nugget : Float</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">spystats.tools.</code><code class="descname">Variogram</code><span class="sig-paren">(</span><em>geopandas_dataset</em>, <em>response_variable_name</em>, <em>model=u''</em>, <em>using_distance_threshold=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/spystats/tools.html#Variogram"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>A class that defines Empirical Variogram objects.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Spystats’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Juan Escamilla Molgora and Erick Chacon Montalvan.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/Introduction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
