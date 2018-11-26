@@ -1,0 +1,101 @@
+2018-04-11 18:36:06,624 - statsutils - INFO - Reprojecting to Alberts equal area
+2018-04-11 18:36:16,615 - statsutils - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-04-11 18:36:16,740 - statsutils - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-04-11 18:36:17,026 - statsutils - INFO - Subselecting Region
+2018-04-11 18:36:41,412 - statsutils - INFO - Reading the empirical Variogram file
+2018-04-11 18:36:41,413 - statsutils - INFO - Instantiating a Variogram object with the values calculated before
+2018-04-11 18:36:41,417 - statsutils - INFO - Dropping possible Nans
+2018-04-11 18:36:41,423 - statsutils - INFO - Instantiating Model...
+2018-04-11 18:36:41,423 - statsutils - INFO - fitting whittle Model with the empirical variogram
+2018-04-11 18:36:41,433 - statsutils - INFO - Model fitted
+2018-04-11 18:41:33,114 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 18:41:33,115 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 18:46:36,459 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 18:46:36,460 - statsutils - INFO - Fitting linear model using GLS
+2018-04-11 19:22:57,569 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9de8ab8f10>
+2018-04-11 19:22:57,581 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899906216775, {{"Intercept":8.4703039602,"logSppN":0.3909593614},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4505374482,"logSppN":0.3793945734},"1":{"Intercept":8.4900704723,"logSppN":0.4025241495}}}
+2018-04-11 19:22:57,601 - statsutils - INFO - Recalculating variogram
+2018-04-11 19:31:02,102 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-11 19:31:02,111 - statsutils - INFO - Variogram parameters: range 41189.3146264, sill 0.340246700398, nugget 0.329937879019
+2018-04-11 19:31:02,112 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 19:31:02,112 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 19:36:53,285 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 19:36:53,286 - statsutils - INFO - Fitting linear model using GLS
+2018-04-11 20:10:18,651 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9decb26e50>
+2018-04-11 20:10:18,656 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899659528047, {{"Intercept":8.4703909802,"logSppN":0.3909289329},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506430214,"logSppN":0.3793684299},"1":{"Intercept":8.4901389391,"logSppN":0.402489436}}}
+2018-04-11 20:10:18,702 - statsutils - INFO - Recalculating variogram
+2018-04-11 20:18:37,923 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-11 20:18:37,928 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-11 20:18:37,928 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 20:18:37,929 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 20:24:33,170 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 20:24:33,170 - statsutils - INFO - Fitting linear model using GLS
+2018-04-11 21:00:36,296 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9deca29e10>
+2018-04-11 21:00:36,300 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-11 21:00:36,335 - statsutils - INFO - Recalculating variogram
+2018-04-11 21:08:49,083 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-11 21:08:49,088 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-11 21:08:49,089 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 21:08:49,089 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 21:14:40,483 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 21:14:40,484 - statsutils - INFO - Fitting linear model using GLS
+2018-04-11 21:50:02,530 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9dec9a7ad0>
+2018-04-11 21:50:02,536 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-11 21:50:02,563 - statsutils - INFO - Recalculating variogram
+2018-04-11 21:58:17,440 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-11 21:58:17,445 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-11 21:58:17,446 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 21:58:17,446 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 22:03:58,273 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 22:03:58,274 - statsutils - INFO - Fitting linear model using GLS
+2018-04-11 22:41:05,201 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9dec8a8bd0>
+2018-04-11 22:41:05,206 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-11 22:41:05,216 - statsutils - INFO - Recalculating variogram
+2018-04-11 22:49:02,669 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-11 22:49:02,674 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-11 22:49:02,674 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 22:49:02,675 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 22:56:46,037 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 22:56:46,038 - statsutils - INFO - Fitting linear model using GLS
+2018-04-11 23:36:28,328 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9dec76ad50>
+2018-04-11 23:36:28,333 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-11 23:36:28,344 - statsutils - INFO - Recalculating variogram
+2018-04-11 23:44:41,492 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-11 23:44:41,497 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-11 23:44:41,497 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-11 23:44:41,498 - statsutils - INFO - Calculating Distance Matrix
+2018-04-11 23:51:04,605 - statsutils - INFO - Calculating GLS estimators
+2018-04-11 23:51:04,606 - statsutils - INFO - Fitting linear model using GLS
+2018-04-12 00:27:21,079 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9dec6ea390>
+2018-04-12 00:27:21,086 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-12 00:27:21,125 - statsutils - INFO - Recalculating variogram
+2018-04-12 00:35:43,133 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-12 00:35:43,140 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-12 00:35:43,140 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-12 00:35:43,141 - statsutils - INFO - Calculating Distance Matrix
+2018-04-12 00:40:46,549 - statsutils - INFO - Calculating GLS estimators
+2018-04-12 00:40:46,550 - statsutils - INFO - Fitting linear model using GLS
+2018-04-12 01:17:41,633 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9de93c8dd0>
+2018-04-12 01:17:41,640 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-12 01:17:41,667 - statsutils - INFO - Recalculating variogram
+2018-04-12 01:25:49,075 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-12 01:25:49,080 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-12 01:25:49,080 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-12 01:25:49,081 - statsutils - INFO - Calculating Distance Matrix
+2018-04-12 01:31:12,440 - statsutils - INFO - Calculating GLS estimators
+2018-04-12 01:31:12,440 - statsutils - INFO - Fitting linear model using GLS
+2018-04-12 02:07:56,079 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9de92c9dd0>
+2018-04-12 02:07:56,086 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-12 02:07:56,114 - statsutils - INFO - Recalculating variogram
+2018-04-12 02:16:02,579 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-12 02:16:02,584 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454
+2018-04-12 02:16:02,585 - statsutils - INFO - Building Spatial Covariance Matrix
+2018-04-12 02:16:02,586 - statsutils - INFO - Calculating Distance Matrix
+2018-04-12 02:21:10,619 - statsutils - INFO - Calculating GLS estimators
+2018-04-12 02:21:10,620 - statsutils - INFO - Fitting linear model using GLS
+2018-04-12 02:55:32,180 - statsutils - WARNING - results <statsmodels.regression.linear_model.RegressionResultsWrapper object at 0x2b9de91cddd0>
+2018-04-12 02:55:32,184 - statsutils - INFO - RESULTS::: n_obs: 36869.0, r-squared: 0.899656094969, {{"Intercept":8.4703962054,"logSppN":0.3909261221},{"Intercept":0.0,"logSppN":0.0},{"0":{"Intercept":8.4506488805,"logSppN":0.379365785},"1":{"Intercept":8.4901435303,"logSppN":0.4024864592}}}
+2018-04-12 02:55:32,235 - statsutils - INFO - Recalculating variogram
+2018-04-12 03:03:25,747 - statsutils - INFO - Refiting Theoretical Variogram
+2018-04-12 03:03:25,754 - statsutils - INFO - Variogram parameters: range 41188.2960135, sill 0.34024669508, nugget 0.329937694454

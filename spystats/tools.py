@@ -622,8 +622,7 @@ def whittleVariogram(h,sill=0,range_a=0,nugget=0,alpha=1):
     else:
         Ih = 1.0 if h >= 0 else 0.0
     #Ih = 1.0 if h >= 0 else 0.0    
-    n = nugget * nugget
-    g_h = ((sill - n)*(1 - np.exp(-(h**alpha / range_a**alpha)))) + n*Ih
+    g_h = ((sill - nugget)*(1 - np.exp(-(h**alpha / range_a**alpha)))) + nugget*Ih
     return g_h
 
 def theoreticalVariogram(model_function,sill,range_a,nugget,alpha=0):
@@ -724,13 +723,13 @@ class VariogramModel(object):
             s,r,n = best_params
             self.sill = s
             self.range_a = r
-            self.nugget = np.absolute(n)
+            self.nugget = n
         except:
             try:
                 s,r,n,a = best_params
                 self.sill = s
                 self.range_a = r
-                self.nugget = np.absolute(n)
+                self.nugget = n
                 self.alpha = a
             except:
                 raise
