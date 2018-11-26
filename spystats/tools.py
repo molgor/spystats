@@ -669,25 +669,13 @@ class VariogramModel(object):
         #corr_cont[corr_cont == 0 ] = 1.0            
         return corr_cont
 
+    @property
+    def sigma2(self):
+        return (self.sill - self.nugget)
 
-
-    def corr_f_old(self,h):
-        """
-        Calculates the correlation function based on the given theoretical "intrinsic valid model"
-        note:
-            Deprecated : Use corr_f
-        """
-        ## correlation function for distances bigger than zero
-        ## See: Diggle & Ribeiro (2006) section 3.5
-        #corr_cont = lambda hx :  1 - (self.sill * self.f(hx) / (self.sill + self.nugget))
-        ## Corrections made and suggested by Erick Chacon
-        #variogram_evaluated = self.f(h)
-        #corr_cont = (self.sill - variogram_evaluated) / (self.sill - self.nugget)
-        corr_cont = lambda hx : (self.sill - self.f(hx)) / (self.sill - self.nugget)
-        return np.array([1.0 if hx == 0 else corr_cont(hx) for hx in h])
-
-
-
+    @property
+    def tau2(self):
+        return self.nugget
 
     def calculateCovarianceMatrixWith(self,Mdist):
         """

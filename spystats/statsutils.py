@@ -244,7 +244,7 @@ def fitGLSRobust(geodataframe,variogram_object,num_iterations=20,distance_thresh
         #variogram_object.empirical = empirical
         logger.info("Recalculating variogram")
         variogram_object.calculateEmpirical()
-        logger.info("Refiting Theoretical Variogram")
+        logger.info("Refitting Theoretical Variogram")
         tt = variogram_object.fitVariogramModel(variogram_object.model)
         logger.info("Variogram parameters: range %s, sill %s, nugget %s"%(tt.range_a,tt.sill,tt.nugget))
 
