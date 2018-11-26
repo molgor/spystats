@@ -1,0 +1,32 @@
+2018-04-11 17:52:28,979 - spystats.statsutils - INFO - Reprojecting to Alberts equal area
+2018-04-11 17:52:39,250 - spystats.statsutils - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-04-11 17:52:39,425 - spystats.statsutils - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-04-11 17:52:40,144 - spystats.statsutils - INFO - Subselecting Region
+2018-04-11 17:53:04,026 - spystats.statsutils - INFO - Reprojecting to Alberts equal area
+2018-04-11 17:53:13,743 - spystats.statsutils - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-04-11 17:53:13,859 - spystats.statsutils - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-04-11 17:53:14,351 - spystats.statsutils - INFO - Subselecting Region
+2018-04-11 17:53:42,757 - spystats.statsutils - INFO - Reprojecting to Alberts equal area
+2018-04-11 17:53:52,581 - spystats.statsutils - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-04-11 17:53:52,731 - spystats.statsutils - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-04-11 17:53:53,213 - spystats.statsutils - INFO - Subselecting Region
+2018-04-11 17:54:28,893 - spystats.statsutils - INFO - Reprojecting to Alberts equal area
+2018-04-11 17:54:38,727 - spystats.statsutils - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-04-11 17:54:38,837 - spystats.statsutils - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-04-11 17:54:39,078 - spystats.statsutils - INFO - Subselecting Region
+2018-04-11 17:55:31,302 - spystats.statsutils - INFO - Reading the empirical Variogram file
+2018-04-11 17:55:31,302 - spystats.statsutils - INFO - Instantiating a Variogram object with the values calculated before
+2018-04-11 17:55:31,309 - spystats.statsutils - INFO - Dropping possible Nans
+2018-04-11 17:55:31,315 - spystats.statsutils - INFO - Instantiating Model...
+2018-04-11 17:55:31,316 - spystats.statsutils - INFO - fitting whittle Model with the empirical variogram
+2018-04-11 17:55:31,455 - spystats.statsutils - INFO - Model fitted
+2018-11-06 16:55:56,135 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Reprojecting to Alberts equal area
+2018-11-06 16:56:01,196 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Removing possible duplicates. 
+ This avoids problems of Non Positive semidefinite
+2018-11-06 16:56:01,309 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Fitting OLS linear model: logBiomass ~ logSppN 
+2018-11-06 16:56:01,824 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Subselecting Region
+2018-11-06 17:00:29,381 - HEC_runs.fit_fia_logbiomass_logspp_GLS - INFO - Fitting linear model using GLS
