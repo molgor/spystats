@@ -13,15 +13,14 @@ __license__ = "GPL"
 __mantainer__ = "Juan"
 __email__ ="j.escamilla.molgora@ciencias.unam.mx"
 
-
+from shapely.geometry import Point
 import pandas as pd
 import numpy as np
+import geopandas as gpd
 import logging
 from os import walk
-import traversals.strategies as st
 import pymc3 as pm
 import matplotlib.pyplot as plt
-from raster_api.tools import RasterContainer
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -36,7 +35,7 @@ def loadDataset(path_to_dataset):
         _files = map(lambda f : dirpath + '/' + f ,filenames)
         ## Read all data
         dataset = map(lambda f : pd.read_csv(f,na_values=["N.A.","NaN","N.A"],encoding='utf8',index_col=0),_files)  
-	dataset = map(lambda d : st.toGeoDataFrame(d,xcoord_name='Longitude',ycoord_name='Latitude'),dataset)    
+	dataset = map(lambda d : toGeoDataFrame(d,xcoord_name='Longitude',ycoord_name='Latitude'),dataset)    
     return dataset
 
 
@@ -169,32 +168,4 @@ def FitMyModel(Y,train,predictor):
    
 
 
-def plotThings(pred_samples,datapred,rastertemplate):
-    preds = pd.DataFrame(pred_samples['f_star']).transpose()
-    import scipy.special as sp
-    alpha = sp.logit(0.5)
-    mean_sample = preds.mean(axis=1)
-    q_025 = preds.quantile(0.025,axis=1)
-    q_975 = preds.quantile(0.975,axis=1)
-    prob_gt05 = preds.apply(lambda row : float(sum(row > alpha))/100,axis=1)
-    surface_data = pd.DataFrame({'mean_sample' : mean_sample, 'q_025':q_025,'q_975':q_975,'prob_gt05':prob_gt05})
 
-    #preds['idx'] = data_star.index.values
-    surface_data['idx'] = datapred['clean'].index.values
-    predictions = datapred['full'].merge(surface_data,how='left',left_index=True,right_on='idx',suffixes=('_obs','_pred'))
-    predicted_data = predictions.mean_sample.values
-    # Raster Container
-    ql_presences_of_something = RasterContainer(predictions.q_025.values,use_metadata_from=rastertemplate.rasterdata,exponential_fam="Bernoulli")
-    ql_presences_of_something.display_field(band=2,origin='Lower',cmap=plt.cm.RdBu,interpolation='None',title="Quantiles 0.025")
-
-    mean_presences_of_something = RasterContainer(predicted_data,use_metadata_from=rastertemplate.rasterdata,exponential_fam="Bernoulli")
-    mean_presences_of_something.display_field(band=2,origin='Lower',cmap=plt.cm.RdBu,interpolation='None',title="mean probability")
-
-    qh_presences_of_something = RasterContainer(predictions.q_975.values,use_metadata_from=rastertemplate.rasterdata,exponential_fam="Bernoulli")
-    qh_presences_of_something.display_field(band=2,origin='Lower',cmap=plt.cm.RdBu,interpolation='None',title="quantile 0.097")
-
-    ## Probability of the probaaility of presences bigger than 0.5
-    prob5 = RasterContainer(predictions.prob_gt05.values,use_metadata_from=rastertemplate.rasterdata,exponential_fam="Bernoulli")
-    prob5.display_field(band=2,origin='Lower',cmap=plt.cm.RdBu,interpolation='None',title="probability of exceding more than 0.5")
-
-    return None
