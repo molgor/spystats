@@ -34,9 +34,10 @@ def loadDataset(path_to_dataset):
     for (dirpath, dirnames,filenames) in walk(path_to_dataset):
         _files = map(lambda f : dirpath + '/' + f ,filenames)
         ## Read all data
-        dataset = map(lambda f : pd.read_csv(f,na_values=["N.A.","NaN","N.A"],encoding='utf8',index_col=0),_files)  
-	dataset = map(lambda d : toGeoDataFrame(d,xcoord_name='Longitude',ycoord_name='Latitude'),dataset)    
-    return dataset
+        dataset = map(lambda f : pd.read_csv(f,na_values=["N.A.","NaN","N.A"],encoding='utf8',index_col=0),_files)
+        dataset2 = map(lambda d : toGeoDataFrame(d,xcoord_name='Longitude',ycoord_name='Latitude'),dataset)
+
+    return dataset2
 
 
 def toGeoDataFrame(pandas_dataframe,xcoord_name='Longitude',ycoord_name='Latitude',srs = 'epsg:4326'):

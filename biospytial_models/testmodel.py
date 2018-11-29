@@ -60,13 +60,15 @@ sys.path.append('/home/hpc/28/escamill/spystats')
 
 from spystats import utilities as ut
 
-train_path = '/storage/users/escamill/presence-only-model/input/train'
+#train_path = '/storage/users/escamill/presence-only-model/input/train'
+train_path = '/mnt/data1/outputs/presence_only_models/data/burseras'
 train_dataset = ut.loadDataset(train_path)
 
 #train_path = '/outputs/presence_only_models/data/root'
 #train_dataset = ut.loadDataset(train_path)
 ## Predictors
-pred_path = '/storage/users/escamill/presence-only-model/input/pred'
+#pred_path = '/storage/users/escamill/presence-only-model/input/pred'
+pred_path = '/mnt/data1/outputs/presence_only_models/predictors/datasetp2'
 pred_dataset = ut.loadDataset(pred_path)
 ### PATCH, the thing is taking backwards the order of the lists of files, because of the name
 #pred_dataset.reverse()
@@ -78,10 +80,10 @@ prediction_dataset_dic= map(lambda p : ut.preparePredictors(p),pred_dataset)
 
 i = 4
 
-datatrain = train_dataset[i]
+datatrain = list(train_dataset)[i]
 #Y = datatrain.Burseraceae
 #Y = datatrain.Burseraceae
-datapred = prediction_dataset_dic[i]
+datapred = list(prediction_dataset_dic)[i]
 
 
 ## Assign categorical values

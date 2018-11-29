@@ -1,0 +1,25 @@
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+bzip2=1.0.6=17
+certifi=2018.1.18=py27_2
+distribute=0.6.45=py27_1
+icc_rt=2019.1=intel_144
+intel-openmp=2019.1=intel_144
+intelpython=2019.1=0
+mkl=2019.1=intel_144
+mkl_fft=1.0.6=py27_2
+mkl_random=1.0.2=py27_0
+numpy=1.15.4=py27_2
+numpy-base=1.15.4=py27_2
+openssl=1.0.2p=0
+pip=9.0.3=py27_1
+python=2.7.14=11
+setuptools=39.0.1=py27_0
+sqlite=3.23.1=1
+tbb=2019.2=intel_144
+tbb4py=2019.2=py27_intel_0
+tcl=8.6.4=20
+tk=8.6.4=28
+wheel=0.31.0=py27_3
+zlib=1.2.11=5
+

@@ -25,8 +25,8 @@ def FitMyModel(trainDM,PredDM):
        
         
 	        ## The latent function
-	        x_index = TXdf.columns.get_loc("Longitude")
-	        y_index = TXdf.columns.get_loc("Latitude")
+	        x_index = TXdf.columns.get_loc(b"Longitude")
+	        y_index = TXdf.columns.get_loc(b"Latitude")
         
 	        ## Building the covariance structure
 	        tau = pm.HalfNormal('tau',sd=10)
@@ -48,8 +48,8 @@ def FitMyModel(trainDM,PredDM):
 
 
 	        #trace = pm.fit(method='advi', callbacks=[CheckParametersConvergence()],n=15000)    
-	        trace = pm.sample(15,init='adapt_diag')
-	        trace = trace.sample(draws=5000)
+	        trace = pm.sample(150,init='adapt_diag')
+	        #trace = trace.sample(draws=5000)
         
 	        # Remove any column that doesnt appear in the training data
 	        ValidPreds = PredDM[TXdf.columns]
