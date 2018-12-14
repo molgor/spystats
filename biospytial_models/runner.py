@@ -101,9 +101,13 @@ def ModelSamplingEffort(trainDM,PredDM):
         # partition dataframes df
         Ydf = trainDM[0]
         TXdf = trainDM[1]
-
-        PXdf = PredDM
-
+        txcols = set(TXdf.columns)
+        pxcols = set(PredDM.columns)
+        common_cols = list(txcols & pxcols)
+        TXdf = TXdf[common_cols]
+        PXdf = PredDM[common_cols]
+        PredX = PXdf.values
+ 
         ## Parameters for linear predictor
         #b0 = pm.Normal('b0',mu=0,sd=10)
         #dum_names = filter(lambda col : str(col).startswith('inegiv5name'),TXdf)
@@ -141,10 +145,10 @@ def ModelSamplingEffort(trainDM,PredDM):
 
         yy = pm.Bernoulli("yy",logit_p=f,observed=Ydf.values)
 
-	# Remove any column that doesnt appear in the training data
-        ValidPreds = PredDM[TXdf.columns]
-        PredX = ValidPreds.values
-        f_star = gp.conditional("f_star", PredX)
+	# Remove any column that doesnt appear in the training data.
+        # Updated: it is the intersection. There could be dummy variables in the
+        # trainingdata that are not in the predictors and viceversa
+        #f_star = gp.conditional("f_star", PredX)
 
         return model
 
