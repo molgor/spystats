@@ -129,10 +129,10 @@ def ModelSamplingEffort(trainDM,PredDM):
         y_index = TXdf.columns.get_loc(b"Latitude")
 
         ## Building the covariance structure
-        tau = pm.HalfNormal('tau',sd=10)
-        sigma = pm.HalfNormal('sigma',sd=10)
+        tau = pm.HalfNormal('tau',sd=3)
+        sigma = pm.HalfNormal('sigma',sd=3)
         #phi = pm.Uniform('phi',0,15)
-        phi = pm.HalfNormal('phi',sd=6)
+        phi = pm.HalfNormal('phi',sd=1)
         Tau = pm.gp.cov.Constant(tau)
         cov = (sigma * pm.gp.cov.Matern32(2,phi,active_dims=[x_index,y_index])) + Tau
 
@@ -145,12 +145,33 @@ def ModelSamplingEffort(trainDM,PredDM):
 
         yy = pm.Bernoulli("yy",logit_p=f,observed=Ydf.values)
 
+        return (model,gp)
+
 	# Remove any column that doesnt appear in the training data.
         # Updated: it is the intersection. There could be dummy variables in the
         # trainingdata that are not in the predictors and viceversa
         #f_star = gp.conditional("f_star", PredX)
 
-        return model
+
+def buildConditional(model,gp_process,trainDM,PredDM):
+    """
+    Expands the covariance matrix to account for unobserved values
+    """
+    # partition dataframes df
+    Ydf = trainDM[0]
+    TXdf = trainDM[1]
+    txcols = set(TXdf.columns)
+    pxcols = set(PredDM.columns)
+    common_cols = list(txcols & pxcols)
+    TXdf = TXdf[common_cols]
+    PXdf = PredDM[common_cols]
+    PredX = PXdf.values
+
+    with model:
+        f_star = gp_process.conditional("f_star", PredX)
+        return (model,f_star)
+
+
 
 def SampleModel(model,inference_method='',ncores='',niters='',nchains=1):
     """
@@ -170,7 +191,7 @@ def SampleModel(model,inference_method='',ncores='',niters='',nchains=1):
 	return trace
 
 
-def SamplePredictions(model,trainDM,PredDM,trace):
+def SamplePredictions(model,gp_process,trainDM,PredDM,trace):
     """
     Generates prediction sampling
     Parameters :
@@ -178,8 +199,10 @@ def SamplePredictions(model,trainDM,PredDM,trace):
         PredDM : A patsy design matrix obtained from the method (splitformula)
         trainDM :  A patsy design matrix obtained from the method (splitformul)
     """
-    with model:
-       pred_samples = pm.sample_ppc(trace, vars=[f_star], samples=100)
+
+    model_ext,f_star = buildConditional(model,gp_process,trainDM,PredDM)
+    with model_ext:
+       pred_samples = pm.sample_ppc(trace, vars=[f_star], samples=300)
     return pred_samples
 
 	        #trace = pm.fit(method='advi', callbacks=[CheckParametersConvergence()],n=15000)    
