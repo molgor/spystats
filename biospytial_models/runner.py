@@ -28,6 +28,7 @@ import pandas as pd
 import itertools as it
 import numpy as np
 import pymc3 as pm
+import theano.tensor as tt
 import sys
 import redis
 import pickle
@@ -83,6 +84,64 @@ def splitByFormula(formula,traindf,predictordf):
     PM = dmatrix(rhs,predictordf,return_type='dataframe')
     return (TM,PM)
 
+def ModelSamplingEffort_nonSpatial(trainDM,PredDM):
+    """
+    Sampling effort model. NON SPATIAL
+    parameters:
+        trainDM : (duple of dataframes). loc 0 is the lhs term of the equation.
+        PredDM : dataframe
+    Returns:  
+        pymc_model : A Pymc3 model object
+
+    notes:
+        Should be the output of the patsy.dmatrices and dmatrix respectively
+    """
+    with pm.Model() as model:
+
+        # partition dataframes df
+        Ydf = trainDM[0]
+        TXdf = trainDM[1]
+        txcols = set(TXdf.columns)
+        pxcols = set(PredDM.columns)
+        common_cols = list(txcols & pxcols)
+        TXdf = TXdf[common_cols]
+        PXdf = PredDM[common_cols]
+        PredX = PXdf.values
+ 
+       ## Parameters for linear predictor
+       ## Create theano vector
+        betas = []
+        for n in common_cols:
+            n = n.replace('"', '').replace("'", '').replace(' ', '').replace(',','')
+            b = pm.Normal(name='b_' + n ,mu=0,sd=1.5)
+            betas.append(b)
+        B = tt.stack(betas,axis=0).T
+
+        ## The latent function
+#        x_index = TXdf.columns.get_loc(b"Longitude")
+#        y_index = TXdf.columns.get_loc(b"Latitude")
+
+        ## Building the covariance structure
+#        tau = pm.HalfNormal('tau',sd=3)
+#        sigma = pm.HalfNormal('sigma',sd=3)
+        #phi = pm.Uniform('phi',0,15)
+#        phi = pm.HalfNormal('phi',sd=1)
+#        Tau = pm.gp.cov.Constant(tau)
+#        cov = (sigma * pm.gp.cov.Matern32(2,phi,active_dims=[x_index,y_index])) + Tau
+
+#        mean_f = pm.gp.mean.Linear(coeffs=B)
+
+#        gp = pm.gp.Latent(mean_func=mean_f,cov_func=cov)
+
+#        f = gp.prior("latent_field", X=TXdf.values,reparameterize=False)
+        f = pm.invlogit(tt.dot(TXdf.values, B))
+
+        yy = pm.Bernoulli("yy",logit_p=f,observed=Ydf.values)
+
+        return model
+
+
+
 
 def ModelSamplingEffort(trainDM,PredDM):
     """
@@ -108,18 +167,17 @@ def ModelSamplingEffort(trainDM,PredDM):
         PXdf = PredDM[common_cols]
         PredX = PXdf.values
  
-        ## Parameters for linear predictor
-        #b0 = pm.Normal('b0',mu=0,sd=10)
-        #dum_names = filter(lambda col : str(col).startswith('inegiv5name'),TXdf)
-        #dumsdf = TXdf[dum_names]
-        #dumshape = dumscols.shape
-        #coordsdf = TXdf[['Longitude','Latitude']]
+       ## Parameters for linear predictor
+       ## Create theano vector
+        betas = []
+        for n in common_cols:
+            n = n.replace('"', '').replace("'", '').replace(' ', '').replace(',','')
+            b = pm.Normal(name='b_' + n ,mu=0,sd=1.5)
+            betas.append(b)
+        B = tt.stack(betas,axis=0).T
 
-        # Create vectors for dumi vars 
-        #drvs = map(lambda col : pm.Normal(col,mu=0,sd=1.5),dum_names)
-        ## Create theano vector
-        dimX = len(TXdf.columns)
-        b = pm.Normal('b',mu=0,sd=1.5,shape=dimX)
+        #dimX = len(TXdf.columns)
+        #b = pm.Normal('b',mu=0,sd=1.5,shape=dimX)
         #mk = pm.math.matrix_dot(TXdf.values,b.transpose())
 
 
@@ -136,7 +194,7 @@ def ModelSamplingEffort(trainDM,PredDM):
         Tau = pm.gp.cov.Constant(tau)
         cov = (sigma * pm.gp.cov.Matern32(2,phi,active_dims=[x_index,y_index])) + Tau
 
-        mean_f = pm.gp.mean.Linear(coeffs=b)
+        mean_f = pm.gp.mean.Linear(coeffs=B)
 
         gp = pm.gp.Latent(mean_func=mean_f,cov_func=cov)
 
@@ -146,11 +204,6 @@ def ModelSamplingEffort(trainDM,PredDM):
         yy = pm.Bernoulli("yy",logit_p=f,observed=Ydf.values)
 
         return (model,gp)
-
-	# Remove any column that doesnt appear in the training data.
-        # Updated: it is the intersection. There could be dummy variables in the
-        # trainingdata that are not in the predictors and viceversa
-        #f_star = gp.conditional("f_star", PredX)
 
 
 def buildConditional(model,gp_process,trainDM,PredDM):
