@@ -22,8 +22,9 @@ import matplotlib.pylab as plt
 import statsmodels.formula.api as smf
 import sys
 sys.path.append('..')
+sys.path.append('.')
 sys.path.append('/home/hpc/28/escamill/spystats')
-import tools
+import spystats.tools
 import statsmodels.regression.linear_model as lm
 import statsmodels.api as sm
 import logging

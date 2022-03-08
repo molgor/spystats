@@ -3,7 +3,7 @@
 """
 
 Statistical Models
-===========
+==================
 
 This module combines traversal strategies for visiting and storing the spatial tree-structures.
 
@@ -58,7 +58,7 @@ def exponentialModel(phi=1.0):
 
 ## This function returns a Distance Matrix given a list of pairs of the form (a,b). It will calculate de distance between (a and b) 
 
-calculateDistanceMatrix = lambda list_of_vectors : np.array(map(lambda (a,b) : np.linalg.norm(a-b),list_of_vectors))
+calculateDistanceMatrix = lambda list_of_vectors : np.array(map(lambda a,b : np.linalg.norm(a-b),list_of_vectors))
 ## note it doesn't have shape of a matrix but doesn't matter.
 
 

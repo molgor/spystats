@@ -106,7 +106,7 @@ def _getDistanceMatrix(geopandas_dataset):
         p : the Minkowski distance exponent (order)
     """
     data = geopandas_dataset
-    coords = zip(data.centroid.x,data.centroid.y)
+    coords = list(zip(data.centroid.x,data.centroid.y))
     dM = sp.distance_matrix(coords,coords,p=2.0)
     return dM
     
@@ -122,7 +122,7 @@ def _getDistResponseVariable(geopandas_dataset,response_variable_name):
         p : the Minkowski distance exponent (order)
     """
     data = geopandas_dataset
-    y = data[response_variable_name]
+    y = data[response_variable_name].astype('float')
     yy = y.values.reshape(-1,1)
     dY = sp.distance_matrix(yy,yy,p=2.0)
     return dY
@@ -152,16 +152,18 @@ def calculateEmpiricalVariogram(distances,response_variable,n_bins=50,distance_t
     if distance_threshold:
         d = d[ d['dist'] < distance_threshold ]
     # The actual emp. var function     
-    empvar =  map(lambda (i,x) : 0.5 * (d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].y.mean()),enumerate(lags))
+    #import ipdb; ipdb.set_trace()
+    empvar =  map(lambda ix : 0.5 * (d[ ( d.dist < partitions[ix[0]+1]) & (d.dist>partitions[ix[0]])].y.mean()),enumerate(lags))
     ## Get number of elements here
-    n_points =  map(lambda (i,x) : d[ ( d.dist < partitions[i+1]) & (d.dist>partitions[i])].shape[0],enumerate(lags))
+    n_points =  map(lambda ix : d[ ( d.dist < partitions[ix[0]+1]) & (d.dist>partitions[ix[0]])].shape[0],enumerate(lags))
    
     
     
     #self.empirical = empvar
-    results = pd.DataFrame({'lags':lags,'variogram':empvar,'n_points' : n_points})
+    content = {'lags':lags,'variogram':list(empvar),'n_points' : list(n_points)}
+    results = pd.DataFrame(content)
     
-    return results  
+    return results
  
 
 def montecarloEnvelope(distances,response_variable,num_iterations=99,n_bins=50,distance_threshold=False):
@@ -238,7 +240,7 @@ class Variogram(object):
         distances = self.distance_coordinates.flatten()
         y = self.distance_responses.flatten()
         results = calculateEmpiricalVariogram(distances,y,n_bins=n_bins,distance_threshold=self.distance_threshold)
-        
+
         self.lags = results.lags
         self.empirical = results.variogram
         self.n_points = results.n_points
@@ -413,8 +415,8 @@ def PartitionDataSet(geodataset,namecolumnx,namecolumny,n_chunks=10,minimmum_num
     xx,yy = np.meshgrid(xp,yp)
     coordinates_list = [ (xx[i][j],yy[i][j]) for i in range(N) for j in range(N)]
     from functools import partial
-    tuples = map(lambda (x,y) : partial(_getExtentFromPoint,x,y,step_sizex=dx,step_sizey=dy)(),coordinates_list)
-    chunks = map(lambda (mx,Mx,my,My) : _subselectDataFrameByCoordinates(data,namecolumnx,namecolumny,mx,Mx,my,My),tuples)
+    tuples = map(lambda x,y : partial(_getExtentFromPoint,x,y,step_sizex=dx,step_sizey=dy)(),coordinates_list)
+    chunks = map(lambda mx,Mx,my,My : _subselectDataFrameByCoordinates(data,namecolumnx,namecolumny,mx,Mx,my,My),tuples)
     ## Here we can filter based on a threshold
     threshold = minimmum_number_of_points
     chunks_non_empty = filter(lambda df : df.shape[0] > threshold ,chunks)
